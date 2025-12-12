@@ -2983,15 +2983,15 @@
                             <h4>冲突处理</h4>
                         </div>
                         <div class="sync-conflict-options">
-                            <div class="conflict-option">
-                                <label class="conflict-option-label">
-                                    <input type="radio" name="conflict" value="local" checked>
-                                    <div class="conflict-option-content">
-                                        <div class="conflict-option-title">以本地数据为准</div>
-                                        <div class="conflict-option-description">发生冲突时，使用本地数据覆盖云端数据</div>
-                                    </div>
-                                </label>
-                            </div>
+            <div class="conflict-option">
+                <label class="conflict-option-label">
+                    <input type="radio" name="conflict" value="local">
+                    <div class="conflict-option-content">
+                        <div class="conflict-option-title">以本地数据为准</div>
+                        <div class="conflict-option-description">发生冲突时，使用本地数据覆盖云端数据</div>
+                    </div>
+                </label>
+            </div>
                             
                             <div class="conflict-option">
                                 <label class="conflict-option-label">
@@ -3005,7 +3005,7 @@
                             
                             <div class="conflict-option">
                                 <label class="conflict-option-label">
-                                    <input type="radio" name="conflict" value="newest">
+                    <input type="radio" name="conflict" value="newest" checked>
                                     <div class="conflict-option-content">
                                         <div class="conflict-option-title">以最新数据为准</div>
                                         <div class="conflict-option-description">发生冲突时，使用时间戳较新的数据</div>
@@ -3077,6 +3077,7 @@
         let firebaseUser = null;
         let cloudConnected = false;
         let cloudRecordCount = 0;
+        let autoConnectAttempts = 0;
 
         // 全局变量
         let glucoseData = JSON.parse(localStorage.getItem('glucoseData')) || [];
@@ -3141,7 +3142,7 @@
 
         function getConflictStrategy() {
             const checked = document.querySelector('input[name="conflict"]:checked');
-            return checked ? checked.value : 'local';
+            return checked ? checked.value : 'newest';
         }
 
         function mergeCloudAndLocal(cloudRecords) {
@@ -3327,6 +3328,15 @@
             }
         }
 
+        // 自动连接（用于移动端进入页面、网络恢复、页面前台）
+        async function autoConnectIfNeeded(trigger = 'auto') {
+            if (cloudConnected) return;
+            if (autoConnectAttempts >= 3) return; // 避免无限重试
+            autoConnectAttempts += 1;
+            addSyncLog(`正在尝试自动连接云端（触发：${trigger}，第 ${autoConnectAttempts} 次）`, 'info');
+            await connectCloudWithLoading(true);
+        }
+
         async function disconnectCloud() {
             // 移除实时监听
             removeRealtimeListener();
@@ -3388,7 +3398,16 @@
             updateSyncStats();
 
             // 页面加载后自动尝试连接并同步（保留手动按钮）
-            connectCloudWithLoading(true);
+            autoConnectIfNeeded('page-load');
+
+            // 网络恢复时自动重试
+            window.addEventListener('online', () => autoConnectIfNeeded('online'));
+            // 回到前台时自动重试（移动端常见场景）
+            document.addEventListener('visibilitychange', () => {
+                if (document.visibilityState === 'visible') {
+                    autoConnectIfNeeded('visible');
+                }
+            });
             
             // 隐藏加载动画
             document.getElementById('loadingOverlay').style.display = 'none';
