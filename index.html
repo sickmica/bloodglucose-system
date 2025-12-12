@@ -3121,6 +3121,7 @@
         let firebaseDatabase = null;
         let firebaseAuth = null;
         let cloudDataRef = null;
+        let cloudSettingsRef = null;
         let firebaseUser = null;
         let cloudConnected = false;
         let cloudRecordCount = 0;
@@ -3251,6 +3252,7 @@
                     updateDashboardStats();
                     updateHistoryTable();
                     updateTrendStats();
+                    initCharts();
                     updateSyncStats(new Date());
 
                     addSyncLog(`云端数据已更新，共 ${cloudRecordCount} 条记录`, 'info');
@@ -3272,6 +3274,69 @@
 
         async function loadCloudDataFromFirebase() {
             if (!cloudDataRef) return;
+
+            try {
+                // 载入设置
+                if (cloudSettingsRef) {
+                    const settingsSnapshot = await cloudSettingsRef.once('value');
+                    const settings = settingsSnapshot.val();
+                    if (settings) {
+                        // 血糖范围设置
+                        if (settings.glucoseRanges) {
+                            glucoseRanges = settings.glucoseRanges;
+                            localStorage.setItem('glucoseRanges', JSON.stringify(glucoseRanges));
+                            
+                            // 更新设置UI
+                            const rangeInputs = {
+                                'fastingMin': glucoseRanges.fasting.min,
+                                'fastingMax': glucoseRanges.fasting.max,
+                                'postMealMin': glucoseRanges.postMeal.min,
+                                'postMealMax': glucoseRanges.postMeal.max,
+                                'randomMin': glucoseRanges.random.min,
+                                'randomMax': glucoseRanges.random.max,
+                                'targetAvg': glucoseRanges.targetAvg
+                            };
+                            
+                            Object.entries(rangeInputs).forEach(([id, value]) => {
+                                const el = document.getElementById(id);
+                                if (el) el.value = value;
+                            });
+                        }
+                        
+                        // 用户资料
+                        if (settings.userProfile) {
+                            userProfile = settings.userProfile;
+                            localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                            initUserProfile();
+                        }
+                        
+                        // 单位设置
+                        if (settings.currentUnit) {
+                            currentUnit = settings.currentUnit;
+                            updateUnitDisplay();
+                        }
+                        
+                        // 主题设置
+                        if (settings.theme && settings.theme !== theme) {
+                            theme = settings.theme;
+                            localStorage.setItem('theme', theme);
+                            if (theme === 'dark') document.body.classList.add('dark-theme');
+                            else if (theme === 'light') document.body.classList.remove('dark-theme');
+                            
+                            document.querySelectorAll('.theme-option').forEach(option => {
+                                option.classList.remove('active');
+                                if (option.dataset.theme === theme) option.classList.add('active');
+                            });
+                        }
+                        
+                        addSyncLog('已从云端同步个性化设置', 'success');
+                    }
+                }
+            } catch (error) {
+                console.warn('载入设置失败:', error);
+                addSyncLog('同步设置失败，使用本地配置', 'warning');
+            }
+
             const snapshot = await cloudDataRef.once('value');
             const data = snapshot.val() || {};
             const cloudRecords = Object.values(data);
@@ -3289,6 +3354,7 @@
             updateDashboardStats();
             updateHistoryTable();
             updateTrendStats();
+            initCharts();
             updateSyncStats(new Date());
 
             addSyncLog(`已从云端载入 ${cloudRecordCount} 条记录`, 'success');
@@ -3304,6 +3370,18 @@
             isSyncing = true;
             
             try {
+                // 同步设置到云端
+                if (cloudSettingsRef) {
+                    const settings = {
+                        glucoseRanges: glucoseRanges,
+                        userProfile: userProfile,
+                        currentUnit: currentUnit,
+                        theme: theme,
+                        lastUpdated: firebase.database.ServerValue.TIMESTAMP
+                    };
+                    cloudSettingsRef.update(settings).catch(e => console.warn('同步设置失败:', e));
+                }
+
                 // 使用事务更新，避免并发冲突
                 await cloudDataRef.transaction((currentData) => {
                     if (currentData === null) {
@@ -3350,12 +3428,16 @@
                 firebaseUser = credential.user;
                 // 使用共享路径，所有设备访问同一数据集
                 cloudDataRef = firebaseDatabase.ref('glucoseRecords');
+                cloudSettingsRef = firebaseDatabase.ref('userSettings');
                 cloudConnected = true;
                 updateConnectionUI(true, '已连接到云端');
                 addSyncLog('匿名登录成功，正在同步数据', 'info');
                 
                 // 首次加载数据
                 await loadCloudDataFromFirebase();
+                
+                // 自动同步一次，确保本地设置（如首次使用）上传到云端
+                await syncLocalToCloud();
                 
                 // 设置实时监听，当其他设备更新数据时自动同步
                 setupRealtimeListener();
@@ -3862,6 +3944,9 @@
                 // 保存到本地存储
                 localStorage.setItem('userProfile', JSON.stringify(userProfile));
                 
+                // 同步到云端
+                if (cloudConnected) syncLocalToCloud().catch(console.warn);
+
                 // 更新页面显示
                 initUserProfile();
                 
@@ -3877,6 +3962,7 @@
                     reader.onload = function(event) {
                         userProfile.avatar = event.target.result;
                         localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                        if (cloudConnected) syncLocalToCloud().catch(console.warn);
                         initUserProfile();
                     };
                     reader.readAsDataURL(file);
@@ -3887,6 +3973,7 @@
             document.getElementById('avatarRemoveBtn').addEventListener('click', function() {
                 userProfile.avatar = '';
                 localStorage.setItem('userProfile', JSON.stringify(userProfile));
+                if (cloudConnected) syncLocalToCloud().catch(console.warn);
                 initUserProfile();
             });
 
@@ -3906,12 +3993,16 @@
                 // 保存到本地存储
                 localStorage.setItem('glucoseRanges', JSON.stringify(glucoseRanges));
                 
+                // 同步到云端
+                if (cloudConnected) syncLocalToCloud().catch(console.warn);
+                
                 // 显示成功提示
                 showAlert('血糖范围设置保存成功！', 'success');
                 
                 // 更新数据
                 updateDashboardStats();
                 updateHistoryTable();
+                initCharts();
             });
 
             // 重置范围设置
@@ -3935,8 +4026,16 @@
                 // 保存到本地存储
                 localStorage.setItem('glucoseRanges', JSON.stringify(glucoseRanges));
                 
+                // 同步到云端
+                if (cloudConnected) syncLocalToCloud().catch(console.warn);
+                
                 // 显示提示
                 showAlert('已恢复默认范围设置！', 'info');
+
+                // 更新数据
+                updateDashboardStats();
+                updateHistoryTable();
+                initCharts();
             });
 
             // 立即同步按钮
