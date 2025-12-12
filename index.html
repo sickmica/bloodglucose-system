@@ -11,6 +11,10 @@
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <!-- 导出功能库 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <style>
         :root {
             --primary-color: #4f46e5;
@@ -1783,36 +1787,79 @@
         }
 
         .conflict-option {
-            padding: 12px 0;
+            position: relative;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.2s ease;
+            background-color: var(--card-bg);
+        }
+
+        body.dark-theme .conflict-option {
+            border-color: #4b5563;
+        }
+
+        .conflict-option.selected {
+            border-color: #06b6d4;
+            background-color: #ecfeff;
+            box-shadow: 0 0 0 1px #06b6d4;
+        }
+
+        body.dark-theme .conflict-option.selected {
+            background-color: rgba(6, 182, 212, 0.15);
         }
 
         .conflict-option-label {
             display: flex;
-            align-items: flex-start;
-            gap: 12px;
+            align-items: center;
+            padding: 16px;
             cursor: pointer;
+            width: 100%;
+            margin: 0;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .conflict-option-label input[type="radio"] {
-            margin-top: 3px;
+            margin-right: 16px;
+            width: 20px;
+            height: 20px;
             accent-color: #06b6d4;
+            flex-shrink: 0;
         }
 
         .conflict-option-content {
             display: flex;
             flex-direction: column;
             gap: 4px;
+            flex: 1;
         }
 
         .conflict-option-title {
             font-weight: 600;
             color: var(--text-color);
-            font-size: 0.95rem;
+            font-size: 1rem;
+            margin-bottom: 2px;
         }
 
         .conflict-option-description {
             font-size: 0.85rem;
             color: var(--text-light);
+            line-height: 1.4;
+        }
+        
+        /* 移动端适配优化 */
+        @media (max-width: 768px) {
+            .conflict-option-label {
+                padding: 14px;
+            }
+            
+            .conflict-option-title {
+                font-size: 0.95rem;
+            }
+            
+            .conflict-option-description {
+                font-size: 0.8rem;
+            }
         }
 
         /* 同步操作按钮 */
@@ -2637,25 +2684,25 @@
                     <div class="form-group">
                         <label>空腹血糖正常范围 (<span id="rangeUnit">mmol/L</span>)</label>
                         <div class="range-inputs">
-                            <input type="number" step="0.1" id="fastingMin" value="3.9" placeholder="最小值">
+                            <input type="number" step="0.1" id="fastingMin" value="7.0" placeholder="最小值">
                             <span>-</span>
-                            <input type="number" step="0.1" id="fastingMax" value="6.1" placeholder="最大值">
+                            <input type="number" step="0.1" id="fastingMax" value="9.0" placeholder="最大值">
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <label>餐后2小时血糖正常范围 (<span id="rangeUnit2">mmol/L</span>)</label>
                         <div class="range-inputs">
-                            <input type="number" step="0.1" id="postMealMin" value="3.9" placeholder="最小值">
+                            <input type="number" step="0.1" id="postMealMin" value="7.8" placeholder="最小值">
                             <span>-</span>
-                            <input type="number" step="0.1" id="postMealMax" value="7.8" placeholder="最大值">
+                            <input type="number" step="0.1" id="postMealMax" value="11.0" placeholder="最大值">
                         </div>
                     </div>
                     
                     <div class="form-group">
                         <label>随机血糖正常范围 (<span id="rangeUnit3">mmol/L</span>)</label>
                         <div class="range-inputs">
-                            <input type="number" step="0.1" id="randomMin" value="3.9" placeholder="最小值">
+                            <input type="number" step="0.1" id="randomMin" value="7.0" placeholder="最小值">
                             <span>-</span>
                             <input type="number" step="0.1" id="randomMax" value="11.1" placeholder="最大值">
                         </div>
@@ -2663,7 +2710,7 @@
                     
                     <div class="form-group">
                         <label for="targetAvg">月度控制目标 (平均血糖值)</label>
-                        <input type="number" step="0.1" id="targetAvg" value="6.5" placeholder="例如: 6.5">
+                        <input type="number" step="0.1" id="targetAvg" value="8.5" placeholder="例如: 6.5">
                     </div>
                     
                     <div class="form-row" style="margin-top: 20px;">
@@ -3098,6 +3145,11 @@
         };
         let currentUnit = 'mmol/L'; // 默认单位
         let theme = localStorage.getItem('theme') || 'light';
+        
+        // 图表实例
+        let glucoseChartInstance = null;
+        let statusChartInstance = null;
+        let weekTrendChartInstance = null;
 
         // Firebase 初始化与云端同步逻辑
         async function ensureFirebaseReady() {
@@ -3482,8 +3534,22 @@
 
         // 初始化图表
         function initCharts() {
+            // 销毁旧图表实例
+            if (glucoseChartInstance) {
+                glucoseChartInstance.destroy();
+                glucoseChartInstance = null;
+            }
+            if (statusChartInstance) {
+                statusChartInstance.destroy();
+                statusChartInstance = null;
+            }
+            if (weekTrendChartInstance) {
+                weekTrendChartInstance.destroy();
+                weekTrendChartInstance = null;
+            }
+
             // 本周趋势图
-            const glucoseChart = new Chart(
+            glucoseChartInstance = new Chart(
                 document.getElementById('glucoseChart'),
                 {
                     type: 'line',
@@ -3516,15 +3582,32 @@
                 }
             );
 
+            // 计算状态分布数据
+            let normalCount = 0;
+            let highCount = 0;
+            let lowCount = 0;
+
+            if (glucoseData && glucoseData.length > 0) {
+                glucoseData.forEach(item => {
+                    const status = getGlucoseStatus(item.value, item.type);
+                    if (status === '正常') normalCount++;
+                    else if (status === '偏高') highCount++;
+                    else if (status === '偏低') lowCount++;
+                });
+            } else {
+                // 如果没有数据，默认全0或显示空状态
+                // 这里为了美观，如果是空数据，可以给个灰色的或者保持0
+            }
+
             // 状态分布饼图
-            const statusChart = new Chart(
+            statusChartInstance = new Chart(
                 document.getElementById('statusChart'),
                 {
                     type: 'doughnut',
                     data: {
                         labels: ['正常', '偏高', '偏低'],
                         datasets: [{
-                            data: [75, 15, 10],
+                            data: [normalCount, highCount, lowCount],
                             backgroundColor: [
                                 '#10b981',
                                 '#ef4444',
@@ -3546,7 +3629,7 @@
             );
 
             // 本周趋势分析图
-            const weekTrendChart = new Chart(
+            weekTrendChartInstance = new Chart(
                 document.getElementById('weekTrendChart'),
                 {
                     type: 'line',
@@ -3587,6 +3670,29 @@
 
         // 绑定所有事件
         function bindEvents() {
+            // 冲突处理选项交互
+            const conflictInputs = document.querySelectorAll('input[name="conflict"]');
+            
+            function updateConflictUI() {
+                conflictInputs.forEach(input => {
+                    const optionDiv = input.closest('.conflict-option');
+                    if (optionDiv) {
+                        if (input.checked) {
+                            optionDiv.classList.add('selected');
+                        } else {
+                            optionDiv.classList.remove('selected');
+                        }
+                    }
+                });
+            }
+            
+            conflictInputs.forEach(input => {
+                input.addEventListener('change', updateConflictUI);
+            });
+            
+            // 初始化冲突处理UI
+            updateConflictUI();
+
             // 侧边栏导航切换
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.addEventListener('click', function() {
@@ -3735,6 +3841,7 @@
                 updateDashboardStats();
                 updateHistoryTable();
                 updateTrendStats();
+                initCharts();
                 
                 // 跳转到仪表板
                 document.querySelector('.nav-item[data-section="dashboard"]').click();
@@ -3862,6 +3969,79 @@
                 }
             });
 
+            // 导出按钮事件
+            const exportCsvBtn = document.getElementById('exportCsvBtn');
+            const exportCsvBtn2 = document.getElementById('exportCsvBtn2');
+            const exportExcelBtn = document.getElementById('exportExcelBtn');
+            const exportPdfBtn = document.getElementById('exportPdfBtn');
+            const exportAllBtn = document.getElementById('exportAllBtn');
+            
+            if (exportCsvBtn) {
+                exportCsvBtn.addEventListener('click', function() {
+                    exportToCSV();
+                });
+            }
+            if (exportCsvBtn2) {
+                exportCsvBtn2.addEventListener('click', function() {
+                    exportToCSV();
+                });
+            }
+            if (exportExcelBtn) {
+                exportExcelBtn.addEventListener('click', function() {
+                    exportToExcel();
+                });
+            }
+            if (exportPdfBtn) {
+                exportPdfBtn.addEventListener('click', function() {
+                    exportToPDF();
+                });
+            }
+            if (exportAllBtn) {
+                exportAllBtn.addEventListener('click', function() {
+                    exportToCSV();
+                });
+            }
+
+            // 设置目标范围按钮
+            const setTargetBtn = document.getElementById('setTargetBtn');
+            if (setTargetBtn) {
+                setTargetBtn.addEventListener('click', function() {
+                    document.querySelector('.nav-item[data-section="settings"]').click();
+                });
+            }
+            
+            // 云端同步按钮
+            const syncDataBtn = document.getElementById('syncDataBtn');
+            if (syncDataBtn) {
+                syncDataBtn.addEventListener('click', function() {
+                    document.querySelector('.nav-item[data-section="sync"]').click();
+                });
+            }
+
+            // 清空所有数据按钮
+            const clearDataBtn = document.getElementById('clearDataBtn');
+            if (clearDataBtn) {
+                clearDataBtn.addEventListener('click', function() {
+                    if (confirm('确定要清空所有数据吗？此操作不可恢复！')) {
+                        glucoseData = [];
+                        localStorage.setItem('glucoseData', JSON.stringify(glucoseData));
+                        
+                        // 自动同步到云端（如果已连接）
+                        if (cloudConnected) {
+                            syncLocalToCloud().catch(err => {
+                                console.warn('自动同步失败:', err);
+                            });
+                        }
+                        
+                        updateDashboardStats();
+                        updateHistoryTable();
+                        updateTrendStats();
+                        initCharts();
+                        showAlert('所有数据已清空', 'success');
+                    }
+                });
+            }
+
             // 其他按钮事件（返回按钮等）
             document.querySelectorAll('[id$="BackBtn"], #backToDashboardBtn, #addNewBtn').forEach(btn => {
                 btn.addEventListener('click', function() {
@@ -3908,13 +4088,43 @@
             const todayAvg = todayData.reduce((sum, item) => sum + item.value, 0) / todayData.length;
             document.getElementById('todayAvg').textContent = convertUnit(todayAvg).toFixed(1);
 
-            // 目标进度
-            const target = glucoseRanges.targetAvg;
-            const avg = glucoseData.reduce((sum, item) => sum + item.value, 0) / glucoseData.length;
-            const progress = Math.min(100, Math.max(0, (avg / target) * 100));
+            // 目标进度 (本月血糖达标率 - Time In Range)
+            const currentMonth = new Date().toISOString().slice(0, 7); // 获取当前年月 YYYY-MM
+            const monthData = glucoseData.filter(item => item.date.startsWith(currentMonth));
+            
+            let progress = 0;
+            if (monthData.length > 0) {
+                // 计算正常状态的记录占比
+                const normalCount = monthData.filter(item => getGlucoseStatus(item.value, item.type) === '正常').length;
+                progress = (normalCount / monthData.length) * 100;
+            }
+
             document.getElementById('targetProgress').textContent = Math.round(progress) + '%';
             document.getElementById('progressFill').style.width = progress + '%';
-            document.getElementById('progressText').textContent = '本月目标达成率: ' + Math.round(progress) + '%';
+            
+            // 根据达标率设置颜色
+            const fillEl = document.getElementById('progressFill');
+            if (progress >= 80) {
+                fillEl.style.backgroundColor = '#10b981'; // 绿色 - 优秀
+            } else if (progress >= 60) {
+                fillEl.style.backgroundColor = '#f59e0b'; // 黄色 - 一般
+            } else {
+                fillEl.style.backgroundColor = '#ef4444'; // 红色 - 需注意
+            }
+            
+            document.getElementById('progressText').textContent = '本月达标率: ' + Math.round(progress) + '% (正常范围占比)';
+            
+            // 更新状态标签
+            const statusEl = document.getElementById('targetStatus');
+            if (progress >= 80) {
+                statusEl.textContent = '达标';
+                statusEl.style.color = '#10b981';
+                statusEl.style.fontWeight = 'bold';
+            } else {
+                statusEl.textContent = '进行中';
+                statusEl.style.color = '#f59e0b';
+                statusEl.style.fontWeight = 'normal';
+            }
         }
 
         // 更新历史表格
@@ -3979,6 +4189,7 @@
                     updateHistoryTable();
                     updateDashboardStats();
                     updateTrendStats();
+                    initCharts();
                     showAlert('记录已删除', 'info');
                 });
             });
@@ -4142,6 +4353,361 @@
                     alert.remove();
                 }, 300);
             }, 3000);
+        }
+
+        // 获取要导出的数据（根据筛选条件）
+        function getExportData() {
+            let data = [...glucoseData];
+            
+            // 根据日期范围筛选
+            const dateFrom = document.getElementById('exportDateFrom')?.value;
+            const dateTo = document.getElementById('exportDateTo')?.value;
+            if (dateFrom) {
+                data = data.filter(item => item.date >= dateFrom);
+            }
+            if (dateTo) {
+                data = data.filter(item => item.date <= dateTo);
+            }
+            
+            // 根据类型筛选
+            const exportType = document.getElementById('exportType')?.value;
+            if (exportType === 'fasting') {
+                data = data.filter(item => item.type === 'fasting');
+            } else if (exportType === 'post-meal') {
+                data = data.filter(item => item.type === 'post-meal-1h' || item.type === 'post-meal-2h');
+            }
+            
+            // 排序（按时间倒序）
+            data.sort((a, b) => {
+                const timeA = new Date(a.date + ' ' + a.time).getTime();
+                const timeB = new Date(b.date + ' ' + b.time).getTime();
+                return timeB - timeA;
+            });
+            
+            return data;
+        }
+
+        // 导出为CSV
+        function exportToCSV() {
+            const data = getExportData();
+            
+            if (data.length === 0) {
+                showAlert('没有可导出的数据', 'error');
+                return;
+            }
+            
+            // 检查是否使用mg/dL单位
+            const useMgdl = document.getElementById('exportUnitMgdl')?.checked || false;
+            
+            // CSV表头
+            const headers = ['日期', '时间', '测量类型', `血糖值(${useMgdl ? 'mg/dL' : 'mmol/L'})`, '状态', '备注'];
+            const csvRows = [headers.join(',')];
+            
+            // 添加数据行
+            data.forEach(item => {
+                const status = getGlucoseStatus(item.value, item.type);
+                const value = useMgdl ? convertUnit(item.value) : item.value;
+                const row = [
+                    item.date,
+                    item.time,
+                    getTypeText(item.type),
+                    value.toFixed(1),
+                    status,
+                    (item.notes || '').replace(/,/g, '，') // 替换逗号避免CSV格式错误
+                ];
+                csvRows.push(row.join(','));
+            });
+            
+            // 创建CSV内容
+            const csvContent = csvRows.join('\n');
+            
+            // 添加BOM以支持Excel正确显示中文
+            const BOM = '\uFEFF';
+            const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
+            
+            // 创建下载链接
+            const link = document.createElement('a');
+            const dateStr = new Date().toISOString().split('T')[0];
+            link.href = URL.createObjectURL(blob);
+            link.download = `血糖记录_${dateStr}.csv`;
+            link.click();
+            
+            showAlert('CSV文件已导出', 'success');
+        }
+
+        // 导出为Excel
+        function exportToExcel() {
+            const data = getExportData();
+            
+            if (data.length === 0) {
+                showAlert('没有可导出的数据', 'error');
+                return;
+            }
+            
+            // 检查是否使用mg/dL单位
+            const useMgdl = document.getElementById('exportUnitMgdl')?.checked || false;
+            
+            // 准备Excel数据
+            const excelData = [
+                ['日期', '时间', '测量类型', `血糖值(${useMgdl ? 'mg/dL' : 'mmol/L'})`, '状态', '备注']
+            ];
+            
+            data.forEach(item => {
+                const status = getGlucoseStatus(item.value, item.type);
+                const value = useMgdl ? convertUnit(item.value) : item.value;
+                excelData.push([
+                    item.date,
+                    item.time,
+                    getTypeText(item.type),
+                    parseFloat(value.toFixed(1)),
+                    status,
+                    item.notes || ''
+                ]);
+            });
+            
+            // 创建工作簿
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(excelData);
+            
+            // 设置列宽
+            ws['!cols'] = [
+                { wch: 12 }, // 日期
+                { wch: 8 },  // 时间
+                { wch: 12 }, // 测量类型
+                { wch: 15 }, // 血糖值
+                { wch: 8 },  // 状态
+                { wch: 30 }  // 备注
+            ];
+            
+            XLSX.utils.book_append_sheet(wb, ws, '血糖记录');
+            
+            // 导出文件
+            const dateStr = new Date().toISOString().split('T')[0];
+            XLSX.writeFile(wb, `血糖记录_${dateStr}.xlsx`);
+            
+            showAlert('Excel文件已导出', 'success');
+        }
+
+        // 导出为PDF（使用html2canvas避免中文乱码）
+        async function exportToPDF() {
+            const data = getExportData();
+            
+            if (data.length === 0) {
+                showAlert('没有可导出的数据', 'error');
+                return;
+            }
+            
+            // 检查选项
+            const useMgdl = document.getElementById('exportUnitMgdl')?.checked || false;
+            const withChart = document.getElementById('exportWithChart')?.checked || false;
+            const withAnalysis = document.getElementById('exportWithAnalysis')?.checked || false;
+            
+            try {
+                showLoading();
+                
+                // 创建临时导出容器
+                const exportContainer = document.createElement('div');
+                exportContainer.style.position = 'absolute';
+                exportContainer.style.left = '-9999px';
+                exportContainer.style.width = '210mm'; // A4宽度
+                exportContainer.style.padding = '20mm';
+                exportContainer.style.backgroundColor = '#ffffff';
+                exportContainer.style.fontFamily = 'Arial, "Microsoft YaHei", sans-serif';
+                document.body.appendChild(exportContainer);
+                
+                // 构建PDF内容HTML
+                let html = `
+                    <div style="font-family: Arial, 'Microsoft YaHei', sans-serif; color: #000;">
+                        <h1 style="text-align: center; font-size: 24px; margin-bottom: 20px;">血糖记录报表</h1>
+                        
+                        <div style="margin-bottom: 20px; font-size: 14px;">
+                            <p><strong>用户:</strong> ${userProfile.name}</p>
+                            <p><strong>导出日期:</strong> ${new Date().toLocaleDateString('zh-CN')}</p>
+                            <p><strong>记录数量:</strong> ${data.length} 条</p>
+                        </div>
+                        
+                        <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px; font-size: 12px;">
+                            <thead>
+                                <tr style="background-color: #f3f4f6;">
+                                    <th style="border: 1px solid #ddd; padding: 10px; text-align: left;">日期</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px; text-align: left;">时间</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px; text-align: left;">类型</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px; text-align: left;">血糖值(${useMgdl ? 'mg/dL' : 'mmol/L'})</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px; text-align: left;">状态</th>
+                                    <th style="border: 1px solid #ddd; padding: 10px; text-align: left;">备注</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                `;
+                
+                data.forEach(item => {
+                    const status = getGlucoseStatus(item.value, item.type);
+                    const value = useMgdl ? convertUnit(item.value) : item.value;
+                    const statusColor = status === '正常' ? '#10b981' : status === '偏高' ? '#ef4444' : '#f59e0b';
+                    
+                    html += `
+                        <tr>
+                            <td style="border: 1px solid #ddd; padding: 8px;">${item.date}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">${item.time}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">${getTypeText(item.type)}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px; font-weight: bold;">${value.toFixed(1)}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px; color: ${statusColor}; font-weight: bold;">${status}</td>
+                            <td style="border: 1px solid #ddd; padding: 8px;">${(item.notes || '').replace(/\n/g, ' ')}</td>
+                        </tr>
+                    `;
+                });
+                
+                html += `
+                            </tbody>
+                        </table>
+                `;
+
+                // 添加图表部分
+                if (withChart && data.length > 0) {
+                    html += `
+                        <div style="margin-top: 30px; margin-bottom: 30px; page-break-inside: avoid;">
+                            <h2 style="font-size: 18px; margin-bottom: 15px;">血糖趋势图</h2>
+                            <div style="width: 100%; height: 300px; position: relative;">
+                                <canvas id="exportChart"></canvas>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                // 添加分析部分
+                if (withAnalysis && data.length > 0) {
+                    const avg = data.reduce((sum, item) => sum + item.value, 0) / data.length;
+                    const max = Math.max(...data.map(item => item.value));
+                    const min = Math.min(...data.map(item => item.value));
+                    const normalCount = data.filter(item => getGlucoseStatus(item.value, item.type) === '正常').length;
+                    const abnormalCount = data.length - normalCount;
+                    const normalRate = ((normalCount / data.length) * 100).toFixed(1);
+                    
+                    html += `
+                        <div style="margin-top: 30px; padding: 20px; background-color: #f9fafb; border-radius: 8px;">
+                            <h2 style="font-size: 18px; margin-bottom: 15px;">数据分析</h2>
+                            <div style="font-size: 14px; line-height: 2;">
+                                <p><strong>平均血糖值:</strong> ${(useMgdl ? convertUnit(avg) : avg).toFixed(1)} ${useMgdl ? 'mg/dL' : 'mmol/L'}</p>
+                                <p><strong>最高血糖值:</strong> ${(useMgdl ? convertUnit(max) : max).toFixed(1)} ${useMgdl ? 'mg/dL' : 'mmol/L'}</p>
+                                <p><strong>最低血糖值:</strong> ${(useMgdl ? convertUnit(min) : min).toFixed(1)} ${useMgdl ? 'mg/dL' : 'mmol/L'}</p>
+                                <p><strong>正常记录数:</strong> ${normalCount} / ${data.length} (${normalRate}%)</p>
+                                <p><strong>异常记录数:</strong> ${abnormalCount} / ${data.length}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                html += `</div>`;
+                
+                exportContainer.innerHTML = html;
+
+                // 渲染图表
+                if (withChart && data.length > 0) {
+                    // 按时间正序排列数据
+                    const chartData = [...data].sort((a, b) => {
+                        return new Date(a.date + ' ' + a.time) - new Date(b.date + ' ' + b.time);
+                    });
+
+                    const ctx = exportContainer.querySelector('#exportChart').getContext('2d');
+                    
+                    // 创建图表
+                    new Chart(ctx, {
+                        type: 'line',
+                        data: {
+                            labels: chartData.map(item => {
+                                const d = new Date(item.date);
+                                return `${d.getMonth() + 1}/${d.getDate()} ${item.time}`;
+                            }),
+                            datasets: [{
+                                label: `血糖值 (${useMgdl ? 'mg/dL' : 'mmol/L'})`,
+                                data: chartData.map(item => useMgdl ? convertUnit(item.value) : item.value),
+                                borderColor: '#4f46e5',
+                                backgroundColor: 'rgba(79, 70, 229, 0.1)',
+                                borderWidth: 2,
+                                tension: 0.3,
+                                fill: true,
+                                pointRadius: 3,
+                                pointBackgroundColor: '#ffffff',
+                                pointBorderColor: '#4f46e5'
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            animation: false,
+                            plugins: {
+                                legend: {
+                                    display: true,
+                                    position: 'top'
+                                }
+                            },
+                            scales: {
+                                y: {
+                                    beginAtZero: false,
+                                    title: {
+                                        display: true,
+                                        text: useMgdl ? 'mg/dL' : 'mmol/L'
+                                    }
+                                },
+                                x: {
+                                    ticks: {
+                                        maxTicksLimit: 20
+                                    }
+                                }
+                            }
+                        }
+                    });
+                    
+                    // 等待图表渲染完成
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                }
+                
+                // 使用html2canvas转换为图片
+                const canvas = await html2canvas(exportContainer, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff',
+                    logging: false
+                });
+                
+                // 移除临时容器
+                document.body.removeChild(exportContainer);
+                
+                // 计算PDF尺寸
+                const imgWidth = 210; // A4宽度 (mm)
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                const pdfHeight = 297; // A4高度 (mm)
+                
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF('p', 'mm', 'a4');
+                
+                // 如果内容超过一页，需要分页
+                let heightLeft = imgHeight;
+                let position = 0;
+                
+                // 添加第一页
+                pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+                heightLeft -= pdfHeight;
+                
+                // 添加后续页面
+                while (heightLeft > 0) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pdfHeight;
+                }
+                
+                // 保存文件
+                const dateStr = new Date().toISOString().split('T')[0];
+                pdf.save(`血糖记录_${dateStr}.pdf`);
+                
+                hideLoading();
+                showAlert('PDF文件已导出', 'success');
+            } catch (error) {
+                console.error('PDF导出错误:', error);
+                hideLoading();
+                showAlert('PDF导出失败: ' + error.message, 'error');
+            }
         }
 
         // 显示加载动画
