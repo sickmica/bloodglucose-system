@@ -3165,6 +3165,58 @@
             return Array.from(merged.values());
         }
 
+        // 实时监听云端数据变化
+        let realtimeListener = null;
+        let isSyncing = false; // 同步标志，防止循环同步
+        
+        function setupRealtimeListener() {
+            if (!cloudDataRef || realtimeListener) return;
+            
+            realtimeListener = cloudDataRef.on('value', (snapshot) => {
+                // 如果正在同步，忽略此次更新（避免循环）
+                if (isSyncing) return;
+                
+                const data = snapshot.val() || {};
+                const cloudRecords = Object.values(data);
+                cloudRecordCount = cloudRecords.length;
+
+                // 合并云端和本地数据
+                const mergedRecords = mergeCloudAndLocal(cloudRecords).sort((a, b) => {
+                    const timeA = new Date(a.createTime || a.id || 0).getTime();
+                    const timeB = new Date(b.createTime || b.id || 0).getTime();
+                    return timeB - timeA;
+                });
+
+                // 只有在数据真正变化时才更新（避免循环同步）
+                const currentDataStr = JSON.stringify(glucoseData.map(r => r.id).sort());
+                const newDataStr = JSON.stringify(mergedRecords.map(r => r.id).sort());
+                
+                if (currentDataStr !== newDataStr) {
+                    glucoseData = mergedRecords;
+                    localStorage.setItem('glucoseData', JSON.stringify(glucoseData));
+
+                    updateDashboardStats();
+                    updateHistoryTable();
+                    updateTrendStats();
+                    updateSyncStats(new Date());
+
+                    addSyncLog(`云端数据已更新，共 ${cloudRecordCount} 条记录`, 'info');
+                }
+            }, (error) => {
+                console.error('实时监听错误:', error);
+                addSyncLog('实时同步错误：' + (error.message || error), 'error');
+            });
+            
+            addSyncLog('已启用实时同步监听', 'info');
+        }
+        
+        function removeRealtimeListener() {
+            if (realtimeListener && cloudDataRef) {
+                cloudDataRef.off('value', realtimeListener);
+                realtimeListener = null;
+            }
+        }
+
         async function loadCloudDataFromFirebase() {
             if (!cloudDataRef) return;
             const snapshot = await cloudDataRef.once('value');
@@ -3195,15 +3247,45 @@
                 if (!cloudConnected) return;
             }
 
-            const payload = {};
-            glucoseData.forEach(item => {
-                payload[item.id] = item;
-            });
-
-            await cloudDataRef.set(payload);
-            cloudRecordCount = glucoseData.length;
-            updateSyncStats(new Date());
-            addSyncLog(`同步成功，共同步 ${cloudRecordCount} 条记录`, 'success');
+            // 设置同步标志，避免实时监听触发循环
+            isSyncing = true;
+            
+            try {
+                // 使用事务更新，避免并发冲突
+                await cloudDataRef.transaction((currentData) => {
+                    if (currentData === null) {
+                        currentData = {};
+                    }
+                    
+                    // 合并本地和云端数据（使用时间戳策略）
+                    const merged = { ...currentData };
+                    glucoseData.forEach(item => {
+                        const existing = merged[item.id];
+                        if (!existing) {
+                            merged[item.id] = item;
+                        } else {
+                            // 如果本地数据更新，则覆盖
+                            const localTime = new Date(item.createTime || item.id || 0).getTime();
+                            const cloudTime = new Date(existing.createTime || existing.id || 0).getTime();
+                            if (localTime >= cloudTime) {
+                                merged[item.id] = item;
+                            }
+                        }
+                    });
+                    
+                    return merged;
+                });
+                
+                cloudRecordCount = glucoseData.length;
+                updateSyncStats(new Date());
+                addSyncLog(`同步成功，共同步 ${cloudRecordCount} 条记录`, 'success');
+            } catch (error) {
+                addSyncLog('同步失败：' + (error.message || error), 'error');
+                showAlert('同步失败：' + (error.message || error), 'error');
+            } finally {
+                // 恢复监听
+                isSyncing = false;
+            }
         }
 
         async function connectCloud() {
@@ -3213,11 +3295,17 @@
             try {
                 const credential = await firebaseAuth.signInAnonymously();
                 firebaseUser = credential.user;
-                cloudDataRef = firebaseDatabase.ref(`users/${firebaseUser.uid}/glucoseRecords`);
+                // 使用共享路径，所有设备访问同一数据集
+                cloudDataRef = firebaseDatabase.ref('glucoseRecords');
                 cloudConnected = true;
                 updateConnectionUI(true, '已连接到云端');
                 addSyncLog('匿名登录成功，正在同步数据', 'info');
+                
+                // 首次加载数据
                 await loadCloudDataFromFirebase();
+                
+                // 设置实时监听，当其他设备更新数据时自动同步
+                setupRealtimeListener();
             } catch (error) {
                 cloudConnected = false;
                 updateConnectionUI(false, '未连接到云端');
@@ -3227,6 +3315,9 @@
         }
 
         async function disconnectCloud() {
+            // 移除实时监听
+            removeRealtimeListener();
+            
             try {
                 if (firebaseAuth) {
                     await firebaseAuth.signOut();
@@ -3590,6 +3681,13 @@
                 glucoseData.unshift(newRecord);
                 localStorage.setItem('glucoseData', JSON.stringify(glucoseData));
                 
+                // 自动同步到云端（如果已连接）
+                if (cloudConnected) {
+                    syncLocalToCloud().catch(err => {
+                        console.warn('自动同步失败:', err);
+                    });
+                }
+                
                 // 重置表单
                 this.reset();
                 document.getElementById('measureDate').value = new Date().toISOString().split('T')[0];
@@ -3840,6 +3938,14 @@
                     const id = parseInt(this.dataset.id);
                     glucoseData = glucoseData.filter(item => item.id !== id);
                     localStorage.setItem('glucoseData', JSON.stringify(glucoseData));
+                    
+                    // 自动同步到云端（如果已连接）
+                    if (cloudConnected) {
+                        syncLocalToCloud().catch(err => {
+                            console.warn('自动同步失败:', err);
+                        });
+                    }
+                    
                     updateHistoryTable();
                     updateDashboardStats();
                     updateTrendStats();
