@@ -542,10 +542,6 @@
                 overflow-x: hidden;
             }
 
-            .mobile-menu-btn {
-                display: block;
-            }
-
             .header {
                 flex-direction: column;
                 align-items: flex-start;
@@ -944,36 +940,71 @@
                 font-size: 14px;
             }
         }
-
-        @media (min-width: 993px) {
-            .mobile-menu-btn {
-                display: none;
-            }
-        }
-
+        
         /* 移动端菜单按钮 */
         .mobile-menu-btn {
             position: fixed;
             top: calc(10px + env(safe-area-inset-top));
             left: 16px;
-            background-color: var(--card-bg);
-            color: var(--primary-color);
-            border: 1px solid rgba(0, 0, 0, 0.04);
-            border-radius: 999px;
-            width: 42px;
-            height: 42px;
+            z-index: 101;
+            border: 1px solid var(--primary-color);
+            outline: none;
+            background-color: transparent;
+            padding: 10px 18px;
+            border-radius: 30px;
+            cursor: pointer;
+            color: #ffffff;
+            overflow: hidden;
+            text-align: center;
+            font-size: 1.1rem;
+            font-weight: 800;
+            min-width: 120px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 1.25rem;
-            z-index: 101;
-            box-shadow: var(--shadow);
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.25s ease, border-color 0.3s ease;
+        }
+
+        .mobile-menu-btn::before {
+            content: "";
+            position: absolute;
+            top: 20%;
+            left: 20%;
+            transform: translate(-50%, -50%);
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary-color);
+            filter: blur(5px);
+            z-index: -1;
+            transition:
+                width 0.9s ease-out,
+                height 0.9s ease-out,
+                background-color 0.3s ease-out;
+            border-radius: 50%;
+        }
+
+        .mobile-menu-btn:hover::before {
+            border-radius: 20px;
+            width: 300px;
+            height: 200px;
+            background-color: var(--primary-color);
+        }
+
+        .mobile-menu-btn--visible {
+            opacity: 1;
+            pointer-events: auto;
         }
 
         body.dark-theme .mobile-menu-btn {
-            background-color: #111827;
-            color: #e5e7eb;
-            border-color: rgba(255, 255, 255, 0.06);
+            border-color: var(--primary-light);
+        }
+
+        @media (min-width: 993px) {
+            .mobile-menu-btn {
+                display: none;
+            }
         }
 
         /* 暗色主题 */
@@ -3956,6 +3987,7 @@
                 sidebar.classList.toggle('active');
                 sidebarOverlay.classList.toggle('active');
                 document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
+                updateMobileMenuVisibility();
             }
 
             mobileMenuBtn.addEventListener('click', toggleSidebar);
@@ -3966,9 +3998,26 @@
                 item.addEventListener('click', () => {
                     if (window.innerWidth <= 992 && sidebar.classList.contains('active')) {
                         toggleSidebar();
+                        setTimeout(updateMobileMenuVisibility, 0);
                     }
                 });
             });
+
+            function updateMobileMenuVisibility() {
+                if (!mobileMenuBtn) return;
+                const isMobile = window.innerWidth <= 992;
+                const atTop = window.scrollY <= 10;
+                const sidebarOpen = sidebar.classList.contains('active');
+                if (isMobile && atTop && !sidebarOpen) {
+                    mobileMenuBtn.classList.add('mobile-menu-btn--visible');
+                } else {
+                    mobileMenuBtn.classList.remove('mobile-menu-btn--visible');
+                }
+            }
+
+            updateMobileMenuVisibility();
+            window.addEventListener('scroll', updateMobileMenuVisibility);
+            window.addEventListener('resize', updateMobileMenuVisibility);
 
             // 主题切换
             document.getElementById('themeToggle').addEventListener('click', function() {
