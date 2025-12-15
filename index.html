@@ -3497,8 +3497,8 @@
                             updateUnitDisplay();
                         }
                         
-                        // 主题设置
-                        if (settings.theme && settings.theme !== theme) {
+                        const localTheme = localStorage.getItem('theme');
+                        if (!localTheme && settings.theme) {
                             theme = settings.theme;
                             localStorage.setItem('theme', theme);
                             if (theme === 'dark') document.body.classList.add('dark-theme');
@@ -3974,6 +3974,9 @@
                         if (sidebarEl) sidebarEl.classList.remove('active');
                         if (overlayEl) overlayEl.classList.remove('active');
                         document.body.style.overflow = '';
+                        if (typeof updateMobileMenuVisibility === 'function') {
+                            updateMobileMenuVisibility();
+                        }
                     }
                 });
             });
@@ -3992,16 +3995,6 @@
 
             mobileMenuBtn.addEventListener('click', toggleSidebar);
             sidebarOverlay.addEventListener('click', toggleSidebar);
-
-            // 点击导航项自动关闭侧边栏（仅在移动端）
-            document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', () => {
-                    if (window.innerWidth <= 992 && sidebar.classList.contains('active')) {
-                        toggleSidebar();
-                        setTimeout(updateMobileMenuVisibility, 0);
-                    }
-                });
-            });
 
             function updateMobileMenuVisibility() {
                 if (!mobileMenuBtn) return;
