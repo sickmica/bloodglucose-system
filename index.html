@@ -1130,6 +1130,10 @@
             border-radius: 20px;
             font-size: 0.85rem;
             font-weight: 600;
+            white-space: nowrap;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .badge-normal {
@@ -1148,8 +1152,10 @@
         }
 
         .action-buttons {
-            display: flex;
+            display: inline-flex;
             gap: 8px;
+            align-items: center;
+            justify-content: center;
         }
 
         .action-btn {
@@ -1165,6 +1171,50 @@
         .action-btn:hover {
             color: var(--primary-color);
             background-color: var(--primary-light);
+        }
+
+        #history table th:nth-child(7),
+        #history table td:nth-child(7) {
+            text-align: center;
+        }
+
+        @media (max-width: 768px) {
+            #history table {
+                table-layout: fixed;
+                width: 100%;
+            }
+
+            #history table th:nth-child(5),
+            #history table td:nth-child(5) {
+                text-align: center;
+            }
+
+            #history table th:nth-child(6),
+            #history table td:nth-child(6) {
+                width: 40%;
+                white-space: normal;
+                word-break: break-word;
+            }
+
+            #history table th:nth-child(7),
+            #history table td:nth-child(7) {
+                width: 70px;
+            }
+
+            #history .badge {
+                padding: 2px 8px;
+                font-size: 0.8rem;
+            }
+
+            #history .action-buttons {
+                justify-content: center;
+                gap: 4px;
+            }
+
+            #history .action-btn {
+                font-size: 0.9rem;
+                padding: 2px;
+            }
         }
 
         .chart-container {
@@ -1230,6 +1280,10 @@
             width: 100%;
             max-width: 100%;
             box-sizing: border-box;
+        }
+
+        #rangeForm .form-row button {
+            width: 100%;
         }
 
         .quick-stats {
@@ -2953,7 +3007,7 @@
                             <i class="fas fa-save"></i>
                             <span>保存设置</span>
                         </button>
-                        <button type="button" class="btn btn-secondary" id="resetRangeBtn" style="flex: 1; margin-left: 12px;">
+                        <button type="button" class="btn btn-secondary" id="resetRangeBtn" style="flex: 1;">
                             <i class="fas fa-undo"></i>
                             <span>恢复默认</span>
                         </button>
@@ -4580,13 +4634,15 @@
                     <td>${convertUnit(item.value).toFixed(1)}</td>
                     <td><span class="badge ${statusClass}">${status}</span></td>
                     <td>${item.notes || '-'}</td>
-                    <td class="action-buttons">
-                        <button class="action-btn edit-btn" data-id="${item.id}">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                        <button class="action-btn delete-btn" data-id="${item.id}">
-                            <i class="fas fa-trash"></i>
-                        </button>
+                    <td>
+                        <div class="action-buttons">
+                            <button class="action-btn edit-btn" data-id="${item.id}">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="action-btn delete-btn" data-id="${item.id}">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
                     </td>
                 </tr>
                 `;
