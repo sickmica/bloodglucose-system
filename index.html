@@ -1054,6 +1054,10 @@
                 min-width: 100%;
                 max-width: 100%;
             }
+            
+            input:focus, select:focus, textarea:focus {
+                box-shadow: none;
+            }
         }
 
         label {
@@ -1212,6 +1216,9 @@
             gap: 12px;
             flex-wrap: wrap;
             margin-bottom: 20px;
+            width: 100%;
+            max-width: 100%;
+            box-sizing: border-box;
         }
 
         .quick-stats {
