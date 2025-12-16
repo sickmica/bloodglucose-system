@@ -1115,6 +1115,24 @@
             border-bottom: 1px solid #e5e7eb;
         }
 
+        #history table th:nth-child(-n+5),
+        #history table td:nth-child(-n+5) {
+            white-space: nowrap;
+        }
+
+        #history table {
+            width: auto;
+            min-width: 800px;
+            table-layout: auto;
+        }
+
+        #history table th:nth-child(6),
+        #history table td:nth-child(6) {
+            width: 30%;
+            white-space: normal;
+            word-break: break-word;
+        }
+
         th {
             background-color: #f9fafb;
             font-weight: 600;
@@ -1180,8 +1198,8 @@
 
         @media (max-width: 768px) {
             #history table {
-                table-layout: fixed;
-                width: 100%;
+                table-layout: auto;
+                width: auto;
             }
 
             #history table th:nth-child(5),
