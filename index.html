@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>血糖追踪管理系统</title>
-    <link rel="icon" href="icon/哈喽.svg" type="image/x-icon"> <!-- 网站图标 -->
+    <link rel="icon" href="icon_dragon.png" type="image/x-icon"> <!-- 网站图标 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- Firebase SDK（使用 compat 版本方便直接初始化） -->
@@ -38,7 +39,8 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
-        html, body {
+        html,
+        body {
             overflow-x: hidden;
             max-width: 100%;
             position: relative;
@@ -372,7 +374,8 @@
         .user-info {
             display: flex;
             flex-direction: column;
-            min-width: 0; /* 防止文本溢出 */
+            min-width: 0;
+            /* 防止文本溢出 */
             flex: 1;
             overflow: hidden;
         }
@@ -537,7 +540,7 @@
             .main-content {
                 margin-left: 0;
                 padding: 16px;
-                padding-top: calc(16px + 56px);
+                padding-top: 16px;
                 padding-bottom: calc(16px + env(safe-area-inset-bottom));
                 width: 100%;
                 max-width: 100%;
@@ -625,7 +628,7 @@
                 flex-direction: column;
                 gap: 0;
             }
-            
+
             .form-row .form-group {
                 min-width: 100%;
                 margin-bottom: 16px;
@@ -657,7 +660,8 @@
                 font-size: 14px;
             }
 
-            th, td {
+            th,
+            td {
                 padding: 12px 10px;
                 font-size: 14px;
             }
@@ -719,11 +723,11 @@
             .section-title {
                 width: 100%;
             }
-            
+
             .title-block {
                 height: 25px;
             }
-            
+
             .header h2 {
                 font-size: 1.6rem;
             }
@@ -733,8 +737,11 @@
             }
 
             /* 移动端输入框字体大小 */
-            input, select, textarea {
-                font-size: 16px !important; /* 防止iOS自动缩放 */
+            input,
+            select,
+            textarea {
+                font-size: 16px !important;
+                /* 防止iOS自动缩放 */
             }
 
             /* 移动端个人化面板 */
@@ -771,45 +778,45 @@
                 grid-template-columns: 1fr;
                 gap: 12px;
             }
-            
+
             .sync-stat-card {
                 padding: 16px;
             }
-            
+
             .sync-stat-icon {
                 width: 40px;
                 height: 40px;
                 font-size: 1.2rem;
             }
-            
+
             .sync-stat-value {
                 font-size: 1.5rem;
             }
-            
+
             .sync-direction-options {
                 gap: 8px;
             }
-            
+
             .sync-direction-option {
                 padding: 12px;
                 gap: 12px;
             }
-            
+
             .direction-icon {
                 width: 40px;
                 height: 40px;
                 font-size: 1rem;
             }
-            
+
             .sync-actions {
                 flex-direction: column;
             }
-            
+
             .sync-actions .btn {
                 width: 100%;
                 justify-content: center;
             }
-            
+
             .sync-frequency-select {
                 width: 100%;
             }
@@ -819,7 +826,8 @@
                 font-size: 15px;
             }
 
-            p, span {
+            p,
+            span {
                 font-size: 14px;
             }
 
@@ -834,7 +842,7 @@
             }
 
             /* 移动端头部操作区重构 - 仅针对页面主标题栏 */
-            .header > .header-actions {
+            .header>.header-actions {
                 display: grid !important;
                 grid-template-areas:
                     "user user"
@@ -844,7 +852,7 @@
                 width: 100%;
             }
 
-            .header > .header-actions .user-panel {
+            .header>.header-actions .user-panel {
                 grid-area: user;
                 width: 100%;
                 margin-left: 0;
@@ -852,21 +860,21 @@
                 background-color: var(--card-bg);
                 padding: 10px;
                 border-radius: 8px;
-                border: 1px solid rgba(0,0,0,0.05);
+                border: 1px solid rgba(0, 0, 0, 0.05);
             }
 
-            body.dark-theme .header > .header-actions .user-panel {
-                border-color: rgba(255,255,255,0.05);
+            body.dark-theme .header>.header-actions .user-panel {
+                border-color: rgba(255, 255, 255, 0.05);
             }
 
-            .header > .header-actions .unit-toggle {
+            .header>.header-actions .unit-toggle {
                 grid-area: unit;
                 margin: 0;
                 justify-self: start;
             }
 
-            .header > .header-actions .btn-primary,
-            .header > .header-actions .btn-secondary {
+            .header>.header-actions .btn-primary,
+            .header>.header-actions .btn-secondary {
                 grid-area: btn;
                 width: auto;
                 margin: 0;
@@ -916,7 +924,7 @@
                 grid-template-columns: repeat(3, 1fr);
                 gap: 10px;
             }
-            
+
             .theme-option {
                 padding: 12px 4px;
                 font-size: 13px;
@@ -926,7 +934,7 @@
                 justify-content: center;
                 gap: 8px;
             }
-            
+
             .theme-option i {
                 margin-right: 0;
                 font-size: 1.4rem;
@@ -937,13 +945,13 @@
             #alertContainer {
                 margin-bottom: 16px;
             }
-            
+
             .alert {
                 padding: 12px 16px;
                 font-size: 14px;
             }
         }
-        
+
         /* 移动端菜单按钮 */
         .mobile-menu-btn {
             position: fixed;
@@ -968,6 +976,14 @@
             opacity: 0;
             pointer-events: none;
             transition: opacity 0.25s ease, border-color 0.3s ease;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .mobile-menu-btn:focus,
+        .mobile-menu-btn:active {
+            outline: none;
+            box-shadow: none;
+            background-color: transparent;
         }
 
         .mobile-menu-btn::before {
@@ -1004,11 +1020,127 @@
             border-color: var(--primary-light);
         }
 
-        @media (min-width: 993px) {
-            .mobile-menu-btn {
-                display: none;
+        /* Mobile Bottom Tab Bar */
+        .bottom-tab-bar {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            height: 70px;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 35px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            z-index: 1000;
+            padding: 0 10px;
+            display: none;
+            /* Hidden by default (desktop) */
+        }
+
+        .bottom-nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: #9CA3AF;
+            font-size: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .bottom-nav-item i {
+            font-size: 20px;
+            margin-bottom: 4px;
+            transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .bottom-nav-item.active {
+            color: var(--primary-color);
+        }
+
+        .bottom-nav-item.active i {
+            transform: translateY(-2px);
+        }
+
+        /* Center FAB (Record Button) */
+        .bottom-nav-item.center-fab {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary-color), #4338ca);
+            border-radius: 18px;
+            /* Squircle */
+            color: white;
+            box-shadow: 0 4px 12px rgba(79, 70, 229, 0.4);
+            margin-bottom: 25px;
+            /* Floats up */
+            transform: translateY(0);
+        }
+
+        .bottom-nav-item.center-fab i {
+            font-size: 24px;
+            margin-bottom: 0;
+        }
+
+        .bottom-nav-item.center-fab:active {
+            transform: scale(0.95);
+        }
+
+        /* Dark Theme Support for Bottom Bar */
+        body.dark-theme .bottom-tab-bar {
+            background: rgba(31, 41, 55, 0.85);
+            /* Dark gray, transparent */
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        body.dark-theme .bottom-nav-item {
+            color: #6B7280;
+        }
+
+        body.dark-theme .bottom-nav-item.active {
+            color: #818cf8;
+            /* Light indigo */
+        }
+
+        @media (max-width: 992px) {
+            .bottom-tab-bar {
+                display: flex;
+                /* Show on mobile */
+            }
+
+            .sidebar {
+                display: flex;
+                transform: translateX(-100%);
+                z-index: 2000;
+                /* Higher than bottom bar */
+                position: fixed;
+                left: 0;
+                top: 0;
+                height: 100vh;
+                width: 280px;
+                transition: transform 0.3s ease;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .main-content {
+                padding-bottom: 100px;
+                /* Space for bottom bar */
+                margin-left: 0;
             }
         }
+
 
         /* 暗色主题 */
         body.dark-theme {
@@ -1054,8 +1186,10 @@
                 min-width: 100%;
                 max-width: 100%;
             }
-            
-            input:focus, select:focus, textarea:focus {
+
+            input:focus,
+            select:focus,
+            textarea:focus {
                 box-shadow: none;
             }
         }
@@ -1068,7 +1202,9 @@
             font-size: 14px;
         }
 
-        input, select, textarea {
+        input,
+        select,
+        textarea {
             width: 100%;
             max-width: 100%;
             padding: 12px 16px;
@@ -1091,7 +1227,9 @@
             appearance: none;
         }
 
-        input:focus, select:focus, textarea:focus {
+        input:focus,
+        select:focus,
+        textarea:focus {
             outline: none;
             border-color: var(--primary-color);
             box-shadow: 0 0 0 3px var(--primary-light);
@@ -1109,7 +1247,8 @@
             min-width: 600px;
         }
 
-        th, td {
+        th,
+        td {
             padding: 16px 20px;
             text-align: left;
             border-bottom: 1px solid #e5e7eb;
@@ -1478,8 +1617,13 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         .personalization-panel {
@@ -1654,35 +1798,42 @@
             border-radius: 50%;
         }
 
-        input:checked + .slider {
+        input:checked+.slider {
             background-color: var(--primary-color);
         }
 
-        input:checked + .slider:before {
+        input:checked+.slider:before {
             transform: translateX(26px);
         }
 
         .title-block.dashboard {
             background-color: #4f46e5;
         }
+
         .title-block.record {
             background-color: #10b981;
         }
+
         .title-block.history {
             background-color: #f59e0b;
         }
+
         .title-block.trend {
             background-color: #8b5cf6;
         }
+
         .title-block.personalization {
             background-color: #ec4899;
         }
+
         .title-block.settings {
             background-color: #6366f1;
         }
+
         .title-block.export {
             background-color: #14b8a6;
         }
+
         .title-block.sync {
             background-color: #06b6d4;
         }
@@ -1741,54 +1892,59 @@
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
         }
 
         /* 全局文本大小调整 */
         body {
             font-size: 16px;
         }
-        
+
         @media (max-width: 768px) {
             body {
                 font-size: 15px;
             }
-            
+
             .header h2 {
                 font-size: 1.4rem;
             }
-            
+
             .card-title {
                 font-size: 1.1rem;
             }
-            
+
             .stat-value {
                 font-size: 1.6rem;
             }
-            
+
             .btn {
                 font-size: 15px;
             }
         }
-        
+
         @media (max-width: 480px) {
             body {
                 font-size: 14px;
             }
-            
+
             .header h2 {
                 font-size: 1.2rem;
             }
-            
+
             .card-title {
                 font-size: 1rem;
             }
-            
+
             .stat-value {
                 font-size: 1.4rem;
             }
-            
+
             .btn {
                 font-size: 14px;
                 padding: 10px 12px;
@@ -1901,9 +2057,17 @@
         }
 
         @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.5; }
-            100% { opacity: 1; }
+            0% {
+                opacity: 1;
+            }
+
+            50% {
+                opacity: 0.5;
+            }
+
+            100% {
+                opacity: 1;
+            }
         }
 
         /* 同步设置组 */
@@ -2139,17 +2303,17 @@
             color: var(--text-light);
             line-height: 1.4;
         }
-        
+
         /* 移动端适配优化 */
         @media (max-width: 768px) {
             .conflict-option-label {
                 padding: 14px;
             }
-            
+
             .conflict-option-title {
                 font-size: 0.95rem;
             }
-            
+
             .conflict-option-description {
                 font-size: 0.8rem;
             }
@@ -2302,20 +2466,21 @@
         }
     </style>
 </head>
+
 <body>
-<script>
-    (function() {
-        var savedTheme = localStorage.getItem('theme') || 'light';
-        if (savedTheme === 'dark') {
-            document.body.classList.add('dark-theme');
-        } else if (savedTheme === 'system') {
-            var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-            if (systemDark) {
+    <script>
+        (function () {
+            var savedTheme = localStorage.getItem('theme') || 'light';
+            if (savedTheme === 'dark') {
                 document.body.classList.add('dark-theme');
+            } else if (savedTheme === 'system') {
+                var systemDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+                if (systemDark) {
+                    document.body.classList.add('dark-theme');
+                }
             }
-        }
-    })();
-</script>
+        })();
+    </script>
     <!-- 加载动画 -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="loading-spinner"></div>
@@ -2324,10 +2489,8 @@
     <!-- 侧边栏遮罩 -->
     <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- 移动端菜单按钮 -->
-    <button class="mobile-menu-btn" id="mobileMenuBtn">
-        <i class="fas fa-bars"></i>
-    </button>
+    <!-- 移动端底部导航栏 (Script inserts this, or we place it at bottom) -->
+    <!-- Removed legacy mobile menu button -->
 
     <!-- 侧边栏 -->
     <aside class="sidebar" id="sidebar">
@@ -2335,7 +2498,7 @@
             <h1>血糖管理系统</h1>
             <p>LiuTwoFire Health</p>
         </div>
-        
+
         <nav class="sidebar-nav">
             <a class="nav-item active" data-section="dashboard">
                 <i class="fas fa-chart-line"></i>
@@ -2370,7 +2533,7 @@
                 <span>云端同步</span>
             </a>
         </nav>
-        
+
         <div class="theme-toggle" id="themeToggle">
             <i class="fas fa-moon"></i>
             <span>暗色主题</span>
@@ -2420,7 +2583,7 @@
                         <div class="stat-label">最新血糖值 (<span id="currentUnit">mmol/L</span>)</div>
                     </div>
                 </div>
-                
+
                 <div class="stat-card">
                     <div class="stat-icon success">
                         <i class="fas fa-chart-line"></i>
@@ -2430,7 +2593,7 @@
                         <div class="stat-label">今日平均血糖</div>
                     </div>
                 </div>
-                
+
                 <div class="stat-card">
                     <div class="stat-icon warning">
                         <i class="fas fa-clipboard-list"></i>
@@ -2440,7 +2603,7 @@
                         <div class="stat-label">今日记录条数</div>
                     </div>
                 </div>
-                
+
                 <div class="stat-card">
                     <div class="stat-icon danger">
                         <i class="fas fa-bullseye"></i>
@@ -2465,7 +2628,7 @@
                         <canvas id="glucoseChart"></canvas>
                     </div>
                 </div>
-                
+
                 <div class="viz-card">
                     <div class="viz-card-header">
                         <h3 class="viz-card-title">血糖状态分布</h3>
@@ -2543,27 +2706,28 @@
                 <div class="card-header">
                     <h3 class="card-title">填写血糖信息</h3>
                 </div>
-                
+
                 <form id="glucoseForm">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="glucoseValue">血糖值 *</label>
                             <input type="number" step="0.1" id="glucoseValue" required placeholder="例如: 6.5">
-                            <p class="unit-hint" style="color: var(--text-light); font-size: 0.85rem; margin-top: 4px;">当前单位: <span id="formUnit">mmol/L</span></p>
+                            <p class="unit-hint" style="color: var(--text-light); font-size: 0.85rem; margin-top: 4px;">
+                                当前单位: <span id="formUnit">mmol/L</span></p>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="measureDate">测量日期 *</label>
                             <input type="date" id="measureDate" required>
                         </div>
                     </div>
-                    
+
                     <div class="form-row">
                         <div class="form-group">
                             <label for="measureTime">测量时间 *</label>
                             <input type="time" id="measureTime" required>
                         </div>
-                        
+
                         <div class="form-group">
                             <label for="measureType">测量类型 *</label>
                             <select id="measureType" required>
@@ -2576,12 +2740,12 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="glucoseNotes">备注 (选填)</label>
                         <textarea id="glucoseNotes" rows="3" placeholder="例如：早餐后吃了水果，运动30分钟等"></textarea>
                     </div>
-                    
+
                     <div class="form-row" style="margin-top: 20px;">
                         <button type="submit" class="btn btn-primary" style="flex: 1;">
                             <i class="fas fa-save"></i>
@@ -2732,7 +2896,7 @@
                         <div class="stat-label">本周最高血糖</div>
                     </div>
                 </div>
-                
+
                 <div class="stat-card">
                     <div class="stat-icon success">
                         <i class="fas fa-arrow-down"></i>
@@ -2742,7 +2906,7 @@
                         <div class="stat-label">本周最低血糖</div>
                     </div>
                 </div>
-                
+
                 <div class="stat-card">
                     <div class="stat-icon warning">
                         <i class="fas fa-chart-pie"></i>
@@ -2752,7 +2916,7 @@
                         <div class="stat-label">本周平均血糖</div>
                     </div>
                 </div>
-                
+
                 <div class="stat-card">
                     <div class="stat-icon danger">
                         <i class="fas fa-exclamation-triangle"></i>
@@ -2844,7 +3008,7 @@
                         </button>
                     </div>
                 </div>
-                
+
                 <form id="profileForm">
                     <div class="form-row">
                         <div class="form-group">
@@ -2856,7 +3020,7 @@
                             <input type="number" id="userAge" placeholder="请输入您的年龄">
                         </div>
                     </div>
-                    
+
                     <div class="form-row">
                         <div class="form-group">
                             <label for="userGender">性别</label>
@@ -2872,7 +3036,7 @@
                             <input type="number" id="userHeight" placeholder="请输入您的身高">
                         </div>
                     </div>
-                    
+
                     <div class="form-row">
                         <div class="form-group">
                             <label for="userWeight">体重 (kg)</label>
@@ -2888,7 +3052,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <button type="submit" class="btn btn-primary" style="margin-top: 20px;">
                         <i class="fas fa-save"></i>
                         <span>保存个人资料</span>
@@ -2919,7 +3083,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="notification-settings">
                         <h4 style="margin-bottom: 16px; color: white;">通知设置</h4>
                         <div class="notification-item">
@@ -2986,7 +3150,7 @@
                 <div class="card-header">
                     <h3 class="card-title">血糖正常范围设置</h3>
                 </div>
-                
+
                 <form id="rangeForm">
                     <div class="form-group">
                         <label>空腹血糖正常范围 (<span id="rangeUnit">mmol/L</span>)</label>
@@ -2996,7 +3160,7 @@
                             <input type="number" step="0.1" id="fastingMax" value="9.0" placeholder="最大值">
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label>餐后2小时血糖正常范围 (<span id="rangeUnit2">mmol/L</span>)</label>
                         <div class="range-inputs">
@@ -3005,7 +3169,7 @@
                             <input type="number" step="0.1" id="postMealMax" value="11.0" placeholder="最大值">
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label>随机血糖正常范围 (<span id="rangeUnit3">mmol/L</span>)</label>
                         <div class="range-inputs">
@@ -3014,12 +3178,12 @@
                             <input type="number" step="0.1" id="randomMax" value="11.1" placeholder="最大值">
                         </div>
                     </div>
-                    
+
                     <div class="form-group">
                         <label for="targetAvg">月度控制目标 (平均血糖值)</label>
                         <input type="number" step="0.1" id="targetAvg" value="8.5" placeholder="例如: 6.5">
                     </div>
-                    
+
                     <div class="form-row" style="margin-top: 20px;">
                         <button type="submit" class="btn btn-primary" style="flex: 1;">
                             <i class="fas fa-save"></i>
@@ -3110,7 +3274,7 @@
                             </select>
                         </div>
                     </div>
-                    
+
                     <div class="option-group">
                         <h3>导出格式</h3>
                         <div style="display: flex; gap: 12px; flex-wrap: wrap;">
@@ -3128,7 +3292,7 @@
                             </button>
                         </div>
                     </div>
-                    
+
                     <div class="option-group">
                         <h3>导出选项</h3>
                         <div style="display: flex; align-items: center; margin-bottom: 12px;">
@@ -3136,7 +3300,8 @@
                             <label for="exportWithChart" style="margin-bottom: 0;">包含趋势图表 (仅PDF)</label>
                         </div>
                         <div style="display: flex; align-items: center; margin-bottom: 12px;">
-                            <input type="checkbox" id="exportWithAnalysis" checked style="width: auto; margin-right: 8px;">
+                            <input type="checkbox" id="exportWithAnalysis" checked
+                                style="width: auto; margin-right: 8px;">
                             <label for="exportWithAnalysis" style="margin-bottom: 0;">包含数据分析 (仅PDF)</label>
                         </div>
                         <div style="display: flex; align-items: center;">
@@ -3185,7 +3350,7 @@
                         <div class="sync-stat-detail" id="lastSyncTime">最后同步：从未</div>
                     </div>
                 </div>
-                
+
                 <div class="sync-stat-card">
                     <div class="sync-stat-icon">
                         <i class="fas fa-laptop"></i>
@@ -3196,7 +3361,7 @@
                         <div class="sync-stat-detail">待同步：<span id="pendingSync">0</span> 条</div>
                     </div>
                 </div>
-                
+
                 <div class="sync-stat-card">
                     <div class="sync-stat-icon">
                         <i class="fas fa-sync-alt"></i>
@@ -3221,7 +3386,7 @@
                         <span id="connectionText">未连接到云端</span>
                     </div>
                 </div>
-                
+
                 <div class="sync-settings-content">
                     <div class="sync-setting-group">
                         <div class="sync-setting-header">
@@ -3239,7 +3404,7 @@
                                     <span class="slider"></span>
                                 </label>
                             </div>
-                            
+
                             <div class="sync-switch-item">
                                 <div class="sync-switch-label">
                                     <div class="sync-switch-title">仅在WiFi下同步</div>
@@ -3250,7 +3415,7 @@
                                     <span class="slider"></span>
                                 </label>
                             </div>
-                            
+
                             <div class="sync-switch-item">
                                 <div class="sync-switch-label">
                                     <div class="sync-switch-title">同步历史数据</div>
@@ -3263,7 +3428,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="sync-setting-group">
                         <div class="sync-setting-header">
                             <i class="fas fa-exchange-alt"></i>
@@ -3282,7 +3447,7 @@
                                     <i class="fas fa-check"></i>
                                 </div>
                             </div>
-                            
+
                             <div class="sync-direction-option" data-direction="local-to-cloud">
                                 <div class="direction-icon">
                                     <i class="fas fa-upload"></i>
@@ -3295,7 +3460,7 @@
                                     <i class="fas fa-check"></i>
                                 </div>
                             </div>
-                            
+
                             <div class="sync-direction-option" data-direction="cloud-to-local">
                                 <div class="direction-icon">
                                     <i class="fas fa-download"></i>
@@ -3310,7 +3475,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="sync-setting-group">
                         <div class="sync-setting-header">
                             <i class="fas fa-clock"></i>
@@ -3330,23 +3495,23 @@
                             <p class="sync-hint">选择"立即同步"将在数据变更时立即同步</p>
                         </div>
                     </div>
-                    
+
                     <div class="sync-setting-group">
                         <div class="sync-setting-header">
                             <i class="fas fa-exclamation-triangle"></i>
                             <h4>冲突处理</h4>
                         </div>
                         <div class="sync-conflict-options">
-            <div class="conflict-option">
-                <label class="conflict-option-label">
-                    <input type="radio" name="conflict" value="local">
-                    <div class="conflict-option-content">
-                        <div class="conflict-option-title">以本地数据为准</div>
-                        <div class="conflict-option-description">发生冲突时，使用本地数据覆盖云端数据</div>
-                    </div>
-                </label>
-            </div>
-                            
+                            <div class="conflict-option">
+                                <label class="conflict-option-label">
+                                    <input type="radio" name="conflict" value="local">
+                                    <div class="conflict-option-content">
+                                        <div class="conflict-option-title">以本地数据为准</div>
+                                        <div class="conflict-option-description">发生冲突时，使用本地数据覆盖云端数据</div>
+                                    </div>
+                                </label>
+                            </div>
+
                             <div class="conflict-option">
                                 <label class="conflict-option-label">
                                     <input type="radio" name="conflict" value="cloud">
@@ -3356,10 +3521,10 @@
                                     </div>
                                 </label>
                             </div>
-                            
+
                             <div class="conflict-option">
                                 <label class="conflict-option-label">
-                    <input type="radio" name="conflict" value="newest" checked>
+                                    <input type="radio" name="conflict" value="newest" checked>
                                     <div class="conflict-option-content">
                                         <div class="conflict-option-title">以最新数据为准</div>
                                         <div class="conflict-option-description">发生冲突时，使用时间戳较新的数据</div>
@@ -3368,7 +3533,7 @@
                             </div>
                         </div>
                     </div>
-                    
+
                     <div class="sync-actions">
                         <button class="btn btn-primary" id="manualSyncBtn">
                             <i class="fas fa-sync-alt"></i>
@@ -3454,7 +3619,7 @@
         let currentUnit = 'mmol/L'; // 默认单位
         let theme = localStorage.getItem('theme') || 'light';
         let editingRecordId = null;
-        
+
         // 图表实例
         let glucoseChartInstance = null;
         let statusChartInstance = null;
@@ -3515,14 +3680,14 @@
         // 实时监听云端数据变化
         let realtimeListener = null;
         let isSyncing = false; // 同步标志，防止循环同步
-        
+
         function setupRealtimeListener() {
             if (!cloudDataRef || realtimeListener) return;
-            
+
             realtimeListener = cloudDataRef.on('value', (snapshot) => {
                 // 如果正在同步，忽略此次更新（避免循环）
                 if (isSyncing) return;
-                
+
                 const data = snapshot.val() || {};
                 const cloudRecords = Object.values(data);
                 cloudRecordCount = cloudRecords.length;
@@ -3537,7 +3702,7 @@
                 // 只有在数据真正变化时才更新（避免循环同步）
                 const currentDataStr = JSON.stringify(glucoseData.map(r => r.id).sort());
                 const newDataStr = JSON.stringify(mergedRecords.map(r => r.id).sort());
-                
+
                 if (currentDataStr !== newDataStr) {
                     glucoseData = mergedRecords;
                     localStorage.setItem('glucoseData', JSON.stringify(glucoseData));
@@ -3554,10 +3719,10 @@
                 console.error('实时监听错误:', error);
                 addSyncLog('实时同步错误：' + (error.message || error), 'error');
             });
-            
+
             addSyncLog('已启用实时同步监听', 'info');
         }
-        
+
         function removeRealtimeListener() {
             if (realtimeListener && cloudDataRef) {
                 cloudDataRef.off('value', realtimeListener);
@@ -3578,7 +3743,7 @@
                         if (settings.glucoseRanges) {
                             glucoseRanges = settings.glucoseRanges;
                             localStorage.setItem('glucoseRanges', JSON.stringify(glucoseRanges));
-                            
+
                             // 更新设置UI
                             const rangeInputs = {
                                 'fastingMin': glucoseRanges.fasting.min,
@@ -3589,39 +3754,39 @@
                                 'randomMax': glucoseRanges.random.max,
                                 'targetAvg': glucoseRanges.targetAvg
                             };
-                            
+
                             Object.entries(rangeInputs).forEach(([id, value]) => {
                                 const el = document.getElementById(id);
                                 if (el) el.value = value;
                             });
                         }
-                        
+
                         // 用户资料
                         if (settings.userProfile) {
                             userProfile = settings.userProfile;
                             localStorage.setItem('userProfile', JSON.stringify(userProfile));
                             initUserProfile();
                         }
-                        
+
                         // 单位设置
                         if (settings.currentUnit) {
                             currentUnit = settings.currentUnit;
                             updateUnitDisplay();
                         }
-                        
+
                         const localTheme = localStorage.getItem('theme');
                         if (!localTheme && settings.theme) {
                             theme = settings.theme;
                             localStorage.setItem('theme', theme);
                             if (theme === 'dark') document.body.classList.add('dark-theme');
                             else if (theme === 'light') document.body.classList.remove('dark-theme');
-                            
+
                             document.querySelectorAll('.theme-option').forEach(option => {
                                 option.classList.remove('active');
                                 if (option.dataset.theme === theme) option.classList.add('active');
                             });
                         }
-                        
+
                         addSyncLog('已从云端同步个性化设置', 'success');
                     }
                 }
@@ -3661,7 +3826,7 @@
 
             // 设置同步标志，避免实时监听触发循环
             isSyncing = true;
-            
+
             try {
                 // 同步设置到云端
                 if (cloudSettingsRef) {
@@ -3683,7 +3848,7 @@
                     });
                     return nextData;
                 });
-                
+
                 cloudRecordCount = glucoseData.length;
                 updateSyncStats(new Date());
                 addSyncLog(`同步成功，共同步 ${cloudRecordCount} 条记录`, 'success');
@@ -3709,13 +3874,13 @@
                 cloudConnected = true;
                 updateConnectionUI(true, '已连接到云端');
                 addSyncLog('匿名登录成功，正在同步数据', 'info');
-                
+
                 // 首次加载数据
                 await loadCloudDataFromFirebase();
-                
+
                 // 自动同步一次，确保本地设置（如首次使用）上传到云端
                 await syncLocalToCloud();
-                
+
                 // 设置实时监听，当其他设备更新数据时自动同步
                 setupRealtimeListener();
             } catch (error) {
@@ -3751,7 +3916,7 @@
         async function disconnectCloud() {
             // 移除实时监听
             removeRealtimeListener();
-            
+
             try {
                 if (firebaseAuth) {
                     await firebaseAuth.signOut();
@@ -3785,22 +3950,22 @@
         }
 
         // DOM 加载完成后执行
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             // 初始化主题
             initTheme();
-            
+
             // 初始化单位
             initUnit();
-            
+
             // 初始化用户资料
             initUserProfile();
-            
+
             // 初始化血糖数据
             initGlucoseData();
-            
+
             // 初始化图表
             initCharts();
-            
+
             // 绑定事件
             bindEvents();
 
@@ -3819,7 +3984,7 @@
                     autoConnectIfNeeded('visible');
                 }
             });
-            
+
             // 隐藏加载动画
             document.getElementById('loadingOverlay').style.display = 'none';
         });
@@ -3870,7 +4035,7 @@
                     avatar.classList.remove('has-avatar');
                 }
             });
-            
+
             const avatarPreview = document.getElementById('avatarPreview');
             const avatarPreviewImg = document.getElementById('avatarPreviewImg');
             const avatarPreviewInitial = avatarPreview ? avatarPreview.querySelector('.avatar-initial') : null;
@@ -3884,12 +4049,12 @@
                     avatarPreviewInitial.textContent = userProfile.name.charAt(0).toUpperCase();
                 }
             }
-            
+
             // 更新用户名
             document.querySelectorAll('.user-name').forEach(el => {
                 el.textContent = userProfile.name;
             });
-            
+
             // 填充个人资料表单
             document.getElementById('userNameInput').value = userProfile.name;
             document.getElementById('userAge').value = userProfile.age || '';
@@ -4046,7 +4211,7 @@
         function bindEvents() {
             // 冲突处理选项交互
             const conflictInputs = document.querySelectorAll('input[name="conflict"]');
-            
+
             function updateConflictUI() {
                 conflictInputs.forEach(input => {
                     const optionDiv = input.closest('.conflict-option');
@@ -4059,27 +4224,27 @@
                     }
                 });
             }
-            
+
             conflictInputs.forEach(input => {
                 input.addEventListener('change', updateConflictUI);
             });
-            
+
             // 初始化冲突处理UI
             updateConflictUI();
 
             // 侧边栏导航切换
             document.querySelectorAll('.nav-item').forEach(item => {
-                item.addEventListener('click', function() {
+                item.addEventListener('click', function () {
                     const sectionId = this.dataset.section;
-                    
+
                     document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
                     this.classList.add('active');
-                    
+
                     document.querySelectorAll('.content-section').forEach(section => {
                         section.classList.remove('active');
                     });
                     document.getElementById(sectionId).classList.add('active');
-                    
+
                     if (window.innerWidth <= 992) {
                         const sidebarEl = document.getElementById('sidebar');
                         const overlayEl = document.getElementById('sidebarOverlay');
@@ -4093,43 +4258,61 @@
                 });
             });
 
-            // 移动端菜单按钮和遮罩层逻辑
+            // 移动端底部导航栏逻辑
+            document.querySelectorAll('.bottom-nav-item').forEach(item => {
+                item.addEventListener('click', function () {
+                    const targetId = this.dataset.target;
+
+                    // Special handling for "Mine" (personalization) tab to toggle sidebar
+                    if (targetId === 'personalization') {
+                        toggleSidebar();
+                        return;
+                    }
+
+                    // Update active state in bottom nav
+                    document.querySelectorAll('.bottom-nav-item').forEach(nav => nav.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // Switch content section
+                    document.querySelectorAll('.content-section').forEach(section => {
+                        section.classList.remove('active');
+                    });
+                    const targetSection = document.getElementById(targetId);
+                    if (targetSection) {
+                        targetSection.classList.add('active');
+                        window.scrollTo(0, 0); // Scroll to top
+                    }
+
+                    // Sync with sidebar if needed (optional)
+                    document.querySelectorAll('.nav-item').forEach(nav => nav.classList.remove('active'));
+                    const sidebarItem = document.querySelector(`.nav-item[data-section="${targetId}"]`);
+                    if (sidebarItem) sidebarItem.classList.add('active');
+                });
+            });
+
+            // Sidebar Toggle Function and Overlay Logic
             const sidebar = document.getElementById('sidebar');
             const sidebarOverlay = document.getElementById('sidebarOverlay');
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
 
             function toggleSidebar() {
                 sidebar.classList.toggle('active');
                 sidebarOverlay.classList.toggle('active');
                 document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
-                updateMobileMenuVisibility();
             }
 
-            mobileMenuBtn.addEventListener('click', toggleSidebar);
-            sidebarOverlay.addEventListener('click', toggleSidebar);
-
-            function updateMobileMenuVisibility() {
-                if (!mobileMenuBtn) return;
-                const isMobile = window.innerWidth <= 992;
-                const atTop = window.scrollY <= 10;
-                const sidebarOpen = sidebar.classList.contains('active');
-                if (isMobile && atTop && !sidebarOpen) {
-                    mobileMenuBtn.classList.add('mobile-menu-btn--visible');
-                } else {
-                    mobileMenuBtn.classList.remove('mobile-menu-btn--visible');
-                }
+            if (sidebarOverlay) {
+                sidebarOverlay.addEventListener('click', toggleSidebar);
             }
 
-            updateMobileMenuVisibility();
-            window.addEventListener('scroll', updateMobileMenuVisibility);
-            window.addEventListener('resize', updateMobileMenuVisibility);
+            // 주 removed redundant theme toggle listener placeholder if needed
+
 
             // 主题切换
-            document.getElementById('themeToggle').addEventListener('click', function() {
+            document.getElementById('themeToggle').addEventListener('click', function () {
                 document.body.classList.toggle('dark-theme');
                 theme = document.body.classList.contains('dark-theme') ? 'dark' : 'light';
                 localStorage.setItem('theme', theme);
-                
+
                 // 更新主题选项
                 document.querySelectorAll('.theme-option').forEach(option => {
                     option.classList.remove('active');
@@ -4139,13 +4322,13 @@
 
             // 主题选项切换
             document.querySelectorAll('.theme-option').forEach(option => {
-                option.addEventListener('click', function() {
+                option.addEventListener('click', function () {
                     document.querySelectorAll('.theme-option').forEach(opt => opt.classList.remove('active'));
                     this.classList.add('active');
-                    
+
                     theme = this.dataset.theme;
                     localStorage.setItem('theme', theme);
-                    
+
                     if (theme === 'dark') {
                         document.body.classList.add('dark-theme');
                     } else if (theme === 'light') {
@@ -4164,30 +4347,30 @@
 
             // 单位切换
             document.querySelectorAll('.unit-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     // 切换单位
                     if (this.id.includes('mgdl')) {
                         currentUnit = 'mg/dL';
                     } else {
                         currentUnit = 'mmol/L';
                     }
-                    
+
                     // 更新激活状态
                     document.querySelectorAll('.unit-btn').forEach(b => {
-                        if ((b.id.includes('mgdl') && currentUnit === 'mg/dL') || 
+                        if ((b.id.includes('mgdl') && currentUnit === 'mg/dL') ||
                             (b.id.includes('mmol') && currentUnit === 'mmol/L')) {
                             b.classList.add('active');
                         } else {
                             b.classList.remove('active');
                         }
                     });
-                    
+
                     // 更新单位显示
                     updateUnitDisplay();
-                    
+
                     // 更新图表
                     initCharts();
-                    
+
                     // 更新数据显示
                     updateDashboardStats();
                     updateHistoryTable();
@@ -4196,21 +4379,21 @@
             });
 
             // 表单提交
-            document.getElementById('glucoseForm').addEventListener('submit', function(e) {
+            document.getElementById('glucoseForm').addEventListener('submit', function (e) {
                 e.preventDefault();
-                
+
                 const glucoseValue = parseFloat(document.getElementById('glucoseValue').value);
                 const measureDate = document.getElementById('measureDate').value;
                 const measureTime = document.getElementById('measureTime').value;
                 const measureType = document.getElementById('measureType').value;
                 const notes = document.getElementById('glucoseNotes').value;
-                
+
                 // 转换单位（存储为mmol/L）
                 let value = glucoseValue;
                 if (currentUnit === 'mg/dL') {
                     value = glucoseValue / 18;
                 }
-                
+
                 if (editingRecordId !== null) {
                     const index = glucoseData.findIndex(item => item.id === editingRecordId);
                     if (index !== -1) {
@@ -4236,42 +4419,42 @@
                     };
                     glucoseData.unshift(newRecord);
                 }
-                
+
                 localStorage.setItem('glucoseData', JSON.stringify(glucoseData));
-                
+
                 // 自动同步到云端（如果已连接）
                 if (cloudConnected) {
                     syncLocalToCloud().catch(err => {
                         console.warn('自动同步失败:', err);
                     });
                 }
-                
+
                 editingRecordId = null;
                 const submitBtn = this.querySelector('button[type="submit"] span');
                 if (submitBtn) submitBtn.textContent = '保存记录';
-                
+
                 // 重置表单
                 this.reset();
                 document.getElementById('measureDate').value = new Date().toISOString().split('T')[0];
                 document.getElementById('measureTime').value = new Date().toTimeString().split(' ')[0].substring(0, 5);
-                
+
                 // 显示成功提示
                 showAlert('记录保存成功！', 'success');
-                
+
                 // 更新数据
                 updateDashboardStats();
                 updateHistoryTable();
                 updateTrendStats();
                 initCharts();
-                
+
                 // 跳转到仪表板
                 document.querySelector('.nav-item[data-section="dashboard"]').click();
             });
 
             // 个人资料表单提交
-            document.getElementById('profileForm').addEventListener('submit', function(e) {
+            document.getElementById('profileForm').addEventListener('submit', function (e) {
                 e.preventDefault();
-                
+
                 // 更新用户资料
                 userProfile.name = document.getElementById('userNameInput').value;
                 userProfile.age = document.getElementById('userAge').value;
@@ -4279,26 +4462,26 @@
                 userProfile.height = document.getElementById('userHeight').value;
                 userProfile.weight = document.getElementById('userWeight').value;
                 userProfile.diabeticType = document.getElementById('userDiabeticType').value;
-                
+
                 // 保存到本地存储
                 localStorage.setItem('userProfile', JSON.stringify(userProfile));
-                
+
                 // 同步到云端
                 if (cloudConnected) syncLocalToCloud().catch(console.warn);
 
                 // 更新页面显示
                 initUserProfile();
-                
+
                 // 显示成功提示
                 showAlert('个人资料保存成功！', 'success');
             });
 
             // 头像上传
-            document.getElementById('avatarUpload').addEventListener('change', function(e) {
+            document.getElementById('avatarUpload').addEventListener('change', function (e) {
                 const file = e.target.files[0];
                 if (file) {
                     const reader = new FileReader();
-                    reader.onload = function(event) {
+                    reader.onload = function (event) {
                         userProfile.avatar = event.target.result;
                         localStorage.setItem('userProfile', JSON.stringify(userProfile));
                         if (cloudConnected) syncLocalToCloud().catch(console.warn);
@@ -4309,7 +4492,7 @@
             });
 
             // 移除头像
-            document.getElementById('avatarRemoveBtn').addEventListener('click', function() {
+            document.getElementById('avatarRemoveBtn').addEventListener('click', function () {
                 userProfile.avatar = '';
                 localStorage.setItem('userProfile', JSON.stringify(userProfile));
                 if (cloudConnected) syncLocalToCloud().catch(console.warn);
@@ -4317,9 +4500,9 @@
             });
 
             // 血糖范围设置表单提交
-            document.getElementById('rangeForm').addEventListener('submit', function(e) {
+            document.getElementById('rangeForm').addEventListener('submit', function (e) {
                 e.preventDefault();
-                
+
                 // 更新范围设置
                 glucoseRanges.fasting.min = parseFloat(document.getElementById('fastingMin').value);
                 glucoseRanges.fasting.max = parseFloat(document.getElementById('fastingMax').value);
@@ -4328,16 +4511,16 @@
                 glucoseRanges.random.min = parseFloat(document.getElementById('randomMin').value);
                 glucoseRanges.random.max = parseFloat(document.getElementById('randomMax').value);
                 glucoseRanges.targetAvg = parseFloat(document.getElementById('targetAvg').value);
-                
+
                 // 保存到本地存储
                 localStorage.setItem('glucoseRanges', JSON.stringify(glucoseRanges));
-                
+
                 // 同步到云端
                 if (cloudConnected) syncLocalToCloud().catch(console.warn);
-                
+
                 // 显示成功提示
                 showAlert('血糖范围设置保存成功！', 'success');
-                
+
                 // 更新数据
                 updateDashboardStats();
                 updateHistoryTable();
@@ -4345,14 +4528,14 @@
             });
 
             // 重置范围设置
-            document.getElementById('resetRangeBtn').addEventListener('click', function() {
+            document.getElementById('resetRangeBtn').addEventListener('click', function () {
                 glucoseRanges = {
                     fasting: { min: 3.9, max: 6.1 },
                     postMeal: { min: 3.9, max: 7.8 },
                     random: { min: 3.9, max: 11.1 },
                     targetAvg: 6.5
                 };
-                
+
                 // 更新表单
                 document.getElementById('fastingMin').value = 3.9;
                 document.getElementById('fastingMax').value = 6.1;
@@ -4361,13 +4544,13 @@
                 document.getElementById('randomMin').value = 3.9;
                 document.getElementById('randomMax').value = 11.1;
                 document.getElementById('targetAvg').value = 6.5;
-                
+
                 // 保存到本地存储
                 localStorage.setItem('glucoseRanges', JSON.stringify(glucoseRanges));
-                
+
                 // 同步到云端
                 if (cloudConnected) syncLocalToCloud().catch(console.warn);
-                
+
                 // 显示提示
                 showAlert('已恢复默认范围设置！', 'info');
 
@@ -4378,7 +4561,7 @@
             });
 
             // 立即同步按钮
-            document.getElementById('manualSyncBtn').addEventListener('click', async function() {
+            document.getElementById('manualSyncBtn').addEventListener('click', async function () {
                 showLoading();
                 try {
                     await syncLocalToCloud();
@@ -4388,17 +4571,17 @@
             });
 
             // 连接云端按钮
-            document.getElementById('connectCloudBtn').addEventListener('click', async function() {
+            document.getElementById('connectCloudBtn').addEventListener('click', async function () {
                 await connectCloudWithLoading();
             });
 
             // 断开云端按钮
-            document.getElementById('disconnectCloudBtn').addEventListener('click', async function() {
+            document.getElementById('disconnectCloudBtn').addEventListener('click', async function () {
                 await disconnectCloud();
             });
 
             // 清空云端数据按钮
-            document.getElementById('clearCloudBtn').addEventListener('click', async function() {
+            document.getElementById('clearCloudBtn').addEventListener('click', async function () {
                 showLoading();
                 try {
                     await clearCloudData();
@@ -4413,29 +4596,29 @@
             const exportExcelBtn = document.getElementById('exportExcelBtn');
             const exportPdfBtn = document.getElementById('exportPdfBtn');
             const exportAllBtn = document.getElementById('exportAllBtn');
-            
+
             if (exportCsvBtn) {
-                exportCsvBtn.addEventListener('click', function() {
+                exportCsvBtn.addEventListener('click', function () {
                     exportToCSV();
                 });
             }
             if (exportCsvBtn2) {
-                exportCsvBtn2.addEventListener('click', function() {
+                exportCsvBtn2.addEventListener('click', function () {
                     exportToCSV();
                 });
             }
             if (exportExcelBtn) {
-                exportExcelBtn.addEventListener('click', function() {
+                exportExcelBtn.addEventListener('click', function () {
                     exportToExcel();
                 });
             }
             if (exportPdfBtn) {
-                exportPdfBtn.addEventListener('click', function() {
+                exportPdfBtn.addEventListener('click', function () {
                     exportToPDF();
                 });
             }
             if (exportAllBtn) {
-                exportAllBtn.addEventListener('click', function() {
+                exportAllBtn.addEventListener('click', function () {
                     exportToCSV();
                 });
             }
@@ -4443,15 +4626,15 @@
             // 设置目标范围按钮
             const setTargetBtn = document.getElementById('setTargetBtn');
             if (setTargetBtn) {
-                setTargetBtn.addEventListener('click', function() {
+                setTargetBtn.addEventListener('click', function () {
                     document.querySelector('.nav-item[data-section="settings"]').click();
                 });
             }
-            
+
             // 云端同步按钮
             const syncDataBtn = document.getElementById('syncDataBtn');
             if (syncDataBtn) {
-                syncDataBtn.addEventListener('click', function() {
+                syncDataBtn.addEventListener('click', function () {
                     document.querySelector('.nav-item[data-section="sync"]').click();
                 });
             }
@@ -4459,18 +4642,18 @@
             // 清空所有数据按钮
             const clearDataBtn = document.getElementById('clearDataBtn');
             if (clearDataBtn) {
-                clearDataBtn.addEventListener('click', function() {
+                clearDataBtn.addEventListener('click', function () {
                     if (confirm('确定要清空所有数据吗？此操作不可恢复！')) {
                         glucoseData = [];
                         localStorage.setItem('glucoseData', JSON.stringify(glucoseData));
-                        
+
                         // 自动同步到云端（如果已连接）
                         if (cloudConnected) {
                             syncLocalToCloud().catch(err => {
                                 console.warn('自动同步失败:', err);
                             });
                         }
-                        
+
                         updateDashboardStats();
                         updateHistoryTable();
                         updateTrendStats();
@@ -4482,14 +4665,14 @@
 
             const filterBtn = document.getElementById('filterBtn');
             if (filterBtn) {
-                filterBtn.addEventListener('click', function() {
+                filterBtn.addEventListener('click', function () {
                     updateHistoryTable();
                 });
             }
 
             const resetFilterBtn = document.getElementById('resetFilterBtn');
             if (resetFilterBtn) {
-                resetFilterBtn.addEventListener('click', function() {
+                resetFilterBtn.addEventListener('click', function () {
                     const dateFrom = document.getElementById('filterDateFrom');
                     const dateTo = document.getElementById('filterDateTo');
                     const typeSelect = document.getElementById('filterType');
@@ -4501,7 +4684,7 @@
             }
 
             document.querySelectorAll('[id$="BackBtn"], #backToDashboardBtn, #addNewBtn').forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     if (this.id === 'addNewBtn') {
                         editingRecordId = null;
                         const submitBtn = document.querySelector('#glucoseForm button[type="submit"] span');
@@ -4578,7 +4761,7 @@
 
             document.getElementById('targetProgress').textContent = Math.round(progress) + '%';
             document.getElementById('progressFill').style.width = progress + '%';
-            
+
             const fillEl = document.getElementById('progressFill');
             if (progress >= 80) {
                 fillEl.style.backgroundColor = '#10b981';
@@ -4587,7 +4770,7 @@
             } else {
                 fillEl.style.backgroundColor = '#ef4444';
             }
-            
+
             const progressTextEl = document.getElementById('progressText');
             if (monthAvg !== null) {
                 const displayMonthAvg = convertUnit(monthAvg).toFixed(1);
@@ -4596,7 +4779,7 @@
             } else {
                 progressTextEl.textContent = '本月达标率: ' + Math.round(progress) + '%';
             }
-            
+
             const statusEl = document.getElementById('targetStatus');
             if (progress >= 80) {
                 statusEl.textContent = '达标';
@@ -4632,7 +4815,7 @@
                 const type = typeEl.value;
                 filteredData = filteredData.filter(item => item.type === type);
             }
-            
+
             if (filteredData.length === 0) {
                 tableBody.innerHTML = '<tr class="empty-state"><td colspan="7"><i class="fas fa-database"></i><p>暂无血糖记录</p></td></tr>';
                 document.getElementById('recordCount').textContent = '共 0 条记录';
@@ -4643,7 +4826,7 @@
             filteredData.forEach(item => {
                 const status = getGlucoseStatus(item.value, item.type);
                 const statusClass = status === '正常' ? 'badge-normal' : status === '偏高' ? 'badge-high' : 'badge-low';
-                
+
                 html += `
                 <tr>
                     <td>${item.date}</td>
@@ -4670,7 +4853,7 @@
             document.getElementById('recordCount').textContent = '共 ' + filteredData.length + ' 条记录';
 
             document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     const id = parseInt(this.dataset.id);
                     const record = glucoseData.find(item => item.id === id);
                     if (!record) return;
@@ -4695,17 +4878,17 @@
             });
 
             document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
+                btn.addEventListener('click', function () {
                     const id = parseInt(this.dataset.id);
                     glucoseData = glucoseData.filter(item => item.id !== id);
                     localStorage.setItem('glucoseData', JSON.stringify(glucoseData));
-                    
+
                     if (cloudConnected) {
                         syncLocalToCloud().catch(err => {
                             console.warn('自动同步失败:', err);
                         });
                     }
-                    
+
                     updateHistoryTable();
                     updateDashboardStats();
                     updateTrendStats();
@@ -4780,7 +4963,7 @@
         // 添加同步日志
         function addSyncLog(message, type) {
             const logList = document.getElementById('syncLogList');
-            
+
             // 移除空状态
             if (logList.querySelector('.sync-log-empty')) {
                 logList.innerHTML = '';
@@ -4789,7 +4972,7 @@
             // 创建日志项
             const logItem = document.createElement('div');
             logItem.className = 'sync-log-item ' + type;
-            
+
             let icon = 'info-circle';
             if (type === 'success') icon = 'check-circle';
             else if (type === 'error') icon = 'exclamation-circle';
@@ -4820,7 +5003,7 @@
         // 获取血糖状态
         function getGlucoseStatus(value, type) {
             let min, max;
-            
+
             if (type === 'fasting') {
                 min = glucoseRanges.fasting.min;
                 max = glucoseRanges.fasting.max;
@@ -4839,7 +5022,7 @@
 
         // 获取测量类型文本
         function getTypeText(type) {
-            switch(type) {
+            switch (type) {
                 case 'fasting': return '空腹';
                 case 'post-meal-1h': return '餐后1小时';
                 case 'post-meal-2h': return '餐后2小时';
@@ -4854,7 +5037,7 @@
             const alertContainer = document.getElementById('alertContainer');
             const alert = document.createElement('div');
             alert.className = 'alert ' + (type === 'success' ? 'alert-warning' : type === 'error' ? 'alert-danger' : 'alert-warning');
-            
+
             let icon = 'info-circle';
             if (type === 'success') icon = 'check-circle';
             else if (type === 'error') icon = 'exclamation-circle';
@@ -4865,7 +5048,7 @@
             `;
 
             alertContainer.appendChild(alert);
-            
+
             // 3秒后移除
             setTimeout(() => {
                 alert.style.opacity = '0';
@@ -4878,7 +5061,7 @@
         // 获取要导出的数据（根据筛选条件）
         function getExportData() {
             let data = [...glucoseData];
-            
+
             // 根据日期范围筛选
             const dateFrom = document.getElementById('exportDateFrom')?.value;
             const dateTo = document.getElementById('exportDateTo')?.value;
@@ -4888,7 +5071,7 @@
             if (dateTo) {
                 data = data.filter(item => item.date <= dateTo);
             }
-            
+
             // 根据类型筛选
             const exportType = document.getElementById('exportType')?.value;
             if (exportType === 'fasting') {
@@ -4896,33 +5079,33 @@
             } else if (exportType === 'post-meal') {
                 data = data.filter(item => item.type === 'post-meal-1h' || item.type === 'post-meal-2h');
             }
-            
+
             // 排序（按时间倒序）
             data.sort((a, b) => {
                 const timeA = new Date(a.date + ' ' + a.time).getTime();
                 const timeB = new Date(b.date + ' ' + b.time).getTime();
                 return timeB - timeA;
             });
-            
+
             return data;
         }
 
         // 导出为CSV
         function exportToCSV() {
             const data = getExportData();
-            
+
             if (data.length === 0) {
                 showAlert('没有可导出的数据', 'error');
                 return;
             }
-            
+
             // 检查是否使用mg/dL单位
             const useMgdl = document.getElementById('exportUnitMgdl')?.checked || false;
-            
+
             // CSV表头
             const headers = ['日期', '时间', '测量类型', `血糖值(${useMgdl ? 'mg/dL' : 'mmol/L'})`, '状态', '备注'];
             const csvRows = [headers.join(',')];
-            
+
             // 添加数据行
             data.forEach(item => {
                 const status = getGlucoseStatus(item.value, item.type);
@@ -4937,41 +5120,41 @@
                 ];
                 csvRows.push(row.join(','));
             });
-            
+
             // 创建CSV内容
             const csvContent = csvRows.join('\n');
-            
+
             // 添加BOM以支持Excel正确显示中文
             const BOM = '\uFEFF';
             const blob = new Blob([BOM + csvContent], { type: 'text/csv;charset=utf-8;' });
-            
+
             // 创建下载链接
             const link = document.createElement('a');
             const dateStr = new Date().toISOString().split('T')[0];
             link.href = URL.createObjectURL(blob);
             link.download = `血糖记录_${dateStr}.csv`;
             link.click();
-            
+
             showAlert('CSV文件已导出', 'success');
         }
 
         // 导出为Excel
         function exportToExcel() {
             const data = getExportData();
-            
+
             if (data.length === 0) {
                 showAlert('没有可导出的数据', 'error');
                 return;
             }
-            
+
             // 检查是否使用mg/dL单位
             const useMgdl = document.getElementById('exportUnitMgdl')?.checked || false;
-            
+
             // 准备Excel数据
             const excelData = [
                 ['日期', '时间', '测量类型', `血糖值(${useMgdl ? 'mg/dL' : 'mmol/L'})`, '状态', '备注']
             ];
-            
+
             data.forEach(item => {
                 const status = getGlucoseStatus(item.value, item.type);
                 const value = useMgdl ? convertUnit(item.value) : item.value;
@@ -4984,11 +5167,11 @@
                     item.notes || ''
                 ]);
             });
-            
+
             // 创建工作簿
             const wb = XLSX.utils.book_new();
             const ws = XLSX.utils.aoa_to_sheet(excelData);
-            
+
             // 设置列宽
             ws['!cols'] = [
                 { wch: 12 }, // 日期
@@ -4998,33 +5181,33 @@
                 { wch: 8 },  // 状态
                 { wch: 30 }  // 备注
             ];
-            
+
             XLSX.utils.book_append_sheet(wb, ws, '血糖记录');
-            
+
             // 导出文件
             const dateStr = new Date().toISOString().split('T')[0];
             XLSX.writeFile(wb, `血糖记录_${dateStr}.xlsx`);
-            
+
             showAlert('Excel文件已导出', 'success');
         }
 
         // 导出为PDF（使用html2canvas避免中文乱码）
         async function exportToPDF() {
             const data = getExportData();
-            
+
             if (data.length === 0) {
                 showAlert('没有可导出的数据', 'error');
                 return;
             }
-            
+
             // 检查选项
             const useMgdl = document.getElementById('exportUnitMgdl')?.checked || false;
             const withChart = document.getElementById('exportWithChart')?.checked || false;
             const withAnalysis = document.getElementById('exportWithAnalysis')?.checked || false;
-            
+
             try {
                 showLoading();
-                
+
                 // 创建临时导出容器
                 const exportContainer = document.createElement('div');
                 exportContainer.style.position = 'absolute';
@@ -5034,7 +5217,7 @@
                 exportContainer.style.backgroundColor = '#ffffff';
                 exportContainer.style.fontFamily = 'Arial, "Microsoft YaHei", sans-serif';
                 document.body.appendChild(exportContainer);
-                
+
                 // 构建PDF内容HTML
                 let html = `
                     <div style="font-family: Arial, 'Microsoft YaHei', sans-serif; color: #000;">
@@ -5059,12 +5242,12 @@
                             </thead>
                             <tbody>
                 `;
-                
+
                 data.forEach(item => {
                     const status = getGlucoseStatus(item.value, item.type);
                     const value = useMgdl ? convertUnit(item.value) : item.value;
                     const statusColor = status === '正常' ? '#10b981' : status === '偏高' ? '#ef4444' : '#f59e0b';
-                    
+
                     html += `
                         <tr>
                             <td style="border: 1px solid #ddd; padding: 8px;">${item.date}</td>
@@ -5076,7 +5259,7 @@
                         </tr>
                     `;
                 });
-                
+
                 html += `
                             </tbody>
                         </table>
@@ -5093,7 +5276,7 @@
                         </div>
                     `;
                 }
-                
+
                 // 添加分析部分
                 if (withAnalysis && data.length > 0) {
                     const avg = data.reduce((sum, item) => sum + item.value, 0) / data.length;
@@ -5102,7 +5285,7 @@
                     const normalCount = data.filter(item => getGlucoseStatus(item.value, item.type) === '正常').length;
                     const abnormalCount = data.length - normalCount;
                     const normalRate = ((normalCount / data.length) * 100).toFixed(1);
-                    
+
                     html += `
                         <div style="margin-top: 30px; padding: 20px; background-color: #f9fafb; border-radius: 8px;">
                             <h2 style="font-size: 18px; margin-bottom: 15px;">数据分析</h2>
@@ -5116,9 +5299,9 @@
                         </div>
                     `;
                 }
-                
+
                 html += `</div>`;
-                
+
                 exportContainer.innerHTML = html;
 
                 // 渲染图表
@@ -5129,7 +5312,7 @@
                     });
 
                     const ctx = exportContainer.querySelector('#exportChart').getContext('2d');
-                    
+
                     // 创建图表
                     new Chart(ctx, {
                         type: 'line',
@@ -5177,11 +5360,11 @@
                             }
                         }
                     });
-                    
+
                     // 等待图表渲染完成
                     await new Promise(resolve => setTimeout(resolve, 500));
                 }
-                
+
                 // 使用html2canvas转换为图片
                 const canvas = await html2canvas(exportContainer, {
                     scale: 2,
@@ -5189,26 +5372,26 @@
                     backgroundColor: '#ffffff',
                     logging: false
                 });
-                
+
                 // 移除临时容器
                 document.body.removeChild(exportContainer);
-                
+
                 // 计算PDF尺寸
                 const imgWidth = 210; // A4宽度 (mm)
                 const imgHeight = (canvas.height * imgWidth) / canvas.width;
                 const pdfHeight = 297; // A4高度 (mm)
-                
+
                 const { jsPDF } = window.jspdf;
                 const pdf = new jsPDF('p', 'mm', 'a4');
-                
+
                 // 如果内容超过一页，需要分页
                 let heightLeft = imgHeight;
                 let position = 0;
-                
+
                 // 添加第一页
                 pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
                 heightLeft -= pdfHeight;
-                
+
                 // 添加后续页面
                 while (heightLeft > 0) {
                     position = heightLeft - imgHeight;
@@ -5216,11 +5399,11 @@
                     pdf.addImage(canvas.toDataURL('image/png'), 'PNG', 0, position, imgWidth, imgHeight);
                     heightLeft -= pdfHeight;
                 }
-                
+
                 // 保存文件
                 const dateStr = new Date().toISOString().split('T')[0];
                 pdf.save(`血糖记录_${dateStr}.pdf`);
-                
+
                 hideLoading();
                 showAlert('PDF文件已导出', 'success');
             } catch (error) {
@@ -5240,5 +5423,30 @@
             document.getElementById('loadingOverlay').style.display = 'none';
         }
     </script>
+    <script type="module" src="/index.tsx"></script>
+    <!-- Floating Bottom Navigation -->
+    <nav class="bottom-tab-bar">
+        <div class="bottom-nav-item active" data-target="dashboard">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </div>
+        <div class="bottom-nav-item" data-target="trend">
+            <i class="fas fa-chart-line"></i>
+            <span>趋势</span>
+        </div>
+        <div class="bottom-nav-item center-fab" data-target="record">
+            <i class="fas fa-plus"></i>
+            <!-- Label hidden for Center FAB usually, but keeping structure -->
+        </div>
+        <div class="bottom-nav-item" data-target="history">
+            <i class="fas fa-history"></i>
+            <span>历史</span>
+        </div>
+        <div class="bottom-nav-item" data-target="personalization">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </div>
+    </nav>
 </body>
+
 </html>
